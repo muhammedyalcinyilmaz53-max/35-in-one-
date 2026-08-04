@@ -1463,7 +1463,7 @@
             </div>
             <div class="menu-grid">
                 <button class="menu-btn" onclick="showContent('notBulma')">1️⃣🗒️ Not Bulma</button>
-                <button class="menu-btn" onclick="showContent('isBulma')">2️⃣ 👨‍💼 İş Bulma</button>
+                <button class="menu-btn" onclick="showContent('ogrenmePlani')">2️⃣ 🧠 Öğrenme Planı</button>
                 <button class="menu-btn" onclick="showContent('ucgenmi')">3️⃣ 📐 Üçgen Mi?</button>
                 <button class="menu-btn" onclick="showContent('gameMenu')">4️⃣ 🎯 Oyunlar</button>
                 <button class="menu-btn" onclick="showContent('sifreOlusturucu')">5️⃣ 🔒 Şifre Oluştur</button>
@@ -1662,32 +1662,20 @@
             <div id="notResult" class="result-box"></div>
         </div>
 
-        <!-- 2. İş Bulma -->
-        <div id="isBulma" class="content-area">
+        <!-- 2. Öğrenme Planı -->
+        <div id="ogrenmePlani" class="content-area">
             <div class="content-header">
-                <h2>💼 İş Bulma - İş Başvurusu</h2>
+                <h2>🧠 Öğrenme Planı Oluşturucu</h2>
             </div>
             <div class="form-group">
-                <label>Yabancı dil biliyor musunuz?</label>
-                <select id="dilBilgisi">
-                    <option value="">Seçiniz</option>
-                    <option value="evet">Evet</option>
-                    <option value="hayir">Hayır</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Office programları biliyor musunuz?</label>
-                <select id="officeBilgisi">
-                    <option value="">Seçiniz</option>
-                    <option value="evet">Evet</option>
-                    <option value="hayir">Hayır</option>
-                </select>
+                <label>Hedeflerini yazın (virgül veya yeni satırla ayırın):</label>
+                <textarea id="planInput" rows="6" placeholder="Matematik, yazılım, İngilizce, proje hazırlığı"></textarea>
             </div>
             <div class="btn-group">
-                <button class="btn-submit" onclick="kontrolEtIsBasvurusu()">Başvuruyu Gönder</button>
+                <button class="btn-submit" onclick="olusturOgrenmePlani()">Plan Oluştur</button>
                 <button class="btn-back" onclick="backToMenu()">Geri</button>
             </div>
-            <div id="isResult" class="result-box"></div>
+            <div id="planResult" class="result-box"></div>
         </div>
 
         <!-- 3. Üçgen Mi? -->
@@ -2665,7 +2653,7 @@
                 settingsReset: 'Varsayilan ayarlar geri yuklendi.',
                 aiGreeting: 'Merhaba, ben bu uygulamanin yerel AI yardimcisiyim. Daha fazla soruya yanit verebilir, mini planlar yazabilir ve yeni araclari yonlendirebilirim.',
                 menu: {
-                    notBulma: '1️⃣🗒️ Not Bulma', isBulma: '2️⃣ 👨‍💼 Is Bulma', ucgenmi: '3️⃣ 📐 Ucgen Mi?', gameMenu: '4️⃣ 🎯 Oyunlar',
+                    notBulma: '1️⃣🗒️ Not Bulma', ogrenmePlani: '2️⃣ 🧠 Öğrenme Planı', ucgenmi: '3️⃣ 📐 Ucgen Mi?', gameMenu: '4️⃣ 🎯 Oyunlar',
                     sifreOlusturucu: '5️⃣ 🔒 Sifre Olustur', yaziAlistiramasi: '6️⃣ 🔤 Yazi Alistirmasi', hesapMakinesi: '7️⃣ 🧮 Hesap Makinesi',
                     mathMenu: '7️⃣ ➕➖➗🟰Matematik', sakaOlustur: '8️⃣ 🎉Saka Olustur', rasgeleAlintilar: '9️⃣ 🎲Rastgele Alinti', kelimeSayisi: '1️⃣0️⃣🔤 Kelime Sayisi',
                     saatTarih: '1️⃣1️⃣ 🕒 Saat/Tarih', yasHesapla: '1️⃣2️⃣ 👤 Yas Hesapla', paraBirim: '1️⃣3️⃣💱 Para Birim', factorial: '1️⃣4️⃣🔢 Faktoriyel',
@@ -2680,33 +2668,53 @@
                 quick: ['Neler yapabiliyor?', 'Sifre oner', 'Matematik menusu', 'Kisa tavsiye', 'Gorev ekle', 'Not al']
             },
             en: {
-                title: 'Multi Purpose App',
-                headerTitle: '🎮 MULTI PURPOSE APP',
-                headerSubtitle: 'Games, Calculations, Tools - All in One Place!',
+                title: 'Multi-Purpose App',
+                headerTitle: '🎮 MULTI-PURPOSE APP',
+                headerSubtitle: 'Games, Calculations, Tools — All in One Place!',
                 dashboardTitle: 'Dashboard',
-                dashboardText: 'Open tools, review recent activity, and jump into your most used categories.',
+                dashboardText: 'Open tools, review recent activity, and jump straight to the categories you use most.',
                 chips: ['All', 'Tools', 'Games', 'Math', 'Productivity'],
-                search: 'Search tools... ex: calculator, game, password',
-                empty: 'No tool matched your search.',
+                search: 'Search tools... e.g. calculator, game, password',
+                empty: 'No tools matched your search.',
                 success: 'Success',
                 error: 'Error',
                 settingsSaved: 'Settings saved.',
                 settingsReset: 'Default settings restored.',
-                aiGreeting: 'Hello, I am the local AI helper for this app. I can answer more questions, write mini plans, and guide you to the right tools.',
+                aiGreeting: 'Hello! I am the local AI assistant for this app. I can answer questions, create mini plans, and guide you to the right tools.',
                 menu: {
-                    notBulma: '1️⃣🗒️ Grade Average', isBulma: '2️⃣ 👨‍💼 Job Check', ucgenmi: '3️⃣ 📐 Triangle Check', gameMenu: '4️⃣ 🎯 Games',
-                    sifreOlusturucu: '5️⃣ 🔒 Password Maker', yaziAlistiramasi: '6️⃣ 🔤 Writing Pad', hesapMakinesi: '7️⃣ 🧮 Calculator',
-                    mathMenu: '8️⃣ ➕➖➗🟰Math', sakaOlustur: '9️⃣ 🎉 Joke Generator', rasgeleAlintilar: '🔟 🎲 Random Quote', kelimeSayisi: '1️⃣1️⃣🔤 Word Counter',
-                    saatTarih: '1️⃣2️⃣ 🕒 Time/Date', yasHesapla: '1️⃣3️⃣ 👤 Age Calculator', paraBirim: '1️⃣4️⃣💱 Currency', factorial: '1️⃣5️⃣🔢 Factorial',
-                    renk: '1️⃣6️⃣🎨 Random Color', zamanDilimi: '1️⃣7️⃣🌍 Time Zones', qrKod: '1️⃣8️⃣📱 QR Tool', stopwatch: '1️⃣9️⃣⏱️ Stopwatch',
-                    tarot: '2️⃣0️⃣🃏 Tarot Card', ayarlar: '2️⃣1️⃣⚙️ Settings', aiYardimci: '2️⃣2️⃣🤖 AI Helper', pomodoro: '2️⃣3️⃣🍅 Pomodoro',
-                    textLab: '2️⃣4️⃣✍️ Text Lab', kararVerici: '2️⃣5️⃣🎲 Decision Picker', hesapYonetimi: '2️⃣6️⃣👤 Account Manager', extraFeatures: '8️⃣ 🆕 10 New Features'
+                    notBulma: '1️⃣🗒️ Grade Average',
+                    ogrenmePlani: '2️⃣ 🧠 Study Plan',
+                    ucgenmi: '3️⃣ 📐 Triangle Check',
+                    gameMenu: '4️⃣ 🎯 Games',
+                    sifreOlusturucu: '5️⃣ 🔒 Password Generator',
+                    yaziAlistiramasi: '6️⃣ 🔤 Writing Practice',
+                    hesapMakinesi: '7️⃣ 🧮 Calculator',
+                    mathMenu: '8️⃣ ➕➖➗🟰 Math',
+                    sakaOlustur: '9️⃣ 🎉 Joke Generator',
+                    rasgeleAlintilar: '🔟 🎲 Random Quotes',
+                    kelimeSayisi: '1️⃣1️⃣🔤 Word Counter',
+                    saatTarih: '1️⃣2️⃣ 🕒 Date & Time',
+                    yasHesapla: '1️⃣3️⃣ 👤 Age Calculator',
+                    paraBirim: '1️⃣4️⃣💱 Currency Converter',
+                    factorial: '1️⃣5️⃣🔢 Factorial',
+                    renk: '1️⃣6️⃣🎨 Random Color',
+                    zamanDilimi: '1️⃣7️⃣🌍 Time Zones',
+                    qrKod: '1️⃣8️⃣📱 QR Code',
+                    stopwatch: '1️⃣9️⃣⏱️ Stopwatch',
+                    tarot: '2️⃣0️⃣🃏 Tarot Card',
+                    ayarlar: '2️⃣1️⃣⚙️ Settings',
+                    aiYardimci: '2️⃣2️⃣🤖 AI Assistant',
+                    pomodoro: '2️⃣3️⃣🍅 Pomodoro',
+                    textLab: '2️⃣4️⃣✍️ Text Lab',
+                    kararVerici: '2️⃣5️⃣🎲 Decision Maker',
+                    hesapYonetimi: '2️⃣6️⃣👤 Account Manager',
+                    extraFeatures: '2️⃣6️⃣ 🆕 10 New Features'
                 },
-                settings: { language: 'Language:', theme: 'Theme:', fontSize: 'Font Size:', reduceMotion: 'Reduce motion', showSeconds: 'Show seconds in clock', sound: 'Enable sound notifications', save: 'Save', reset: 'Reset' },
+                settings: { language: 'Language:', theme: 'Theme:', fontSize: 'Font Size:', reduceMotion: 'Reduce motion', showSeconds: 'Show seconds on the clock', sound: 'Enable sound notifications', save: 'Save', reset: 'Reset' },
                 pomodoro: { title: '🍅 Pomodoro Focus Timer', focus: 'Focus Length (min):', break: 'Break Length (min):', ready: 'Focus session ready', active: 'Focus time', breakActive: 'Break time', start: 'Start', pause: 'Pause', skip: 'Skip Phase' },
                 textLab: { title: '✍️ Text Lab', input: 'Enter Text:', action: 'Choose Action:', run: 'Run' },
-                decision: { title: '🎲 Decision Picker', input: 'Options (comma separated):', pick: 'Pick Random', shuffle: 'Shuffle' },
-                quick: ['What can you do?', 'Suggest password', 'Math menu', 'Quick advice', 'Add task', 'Save note']
+                decision: { title: '🎲 Decision Picker', input: 'Options (comma-separated):', pick: 'Pick Random', shuffle: 'Shuffle' },
+                quick: ['What can you do?', 'Suggest a password', 'Math menu', 'Quick advice', 'Add task', 'Save note']
             }
         };
         const uiMessages = {
@@ -2739,19 +2747,19 @@
                 quizFinish: score => `Quiz finished. You scored ${score} points.`,
                 quizSelectCategory: 'Choose a category to start the quiz one question at a time.',
                 chooseCard: 'Please choose a card!',
-                validTableNumber: 'Please enter a number between 1 and 20!',
-                validFibNumber: 'Please enter a value between 1 and 50!',
-                validGuessNumber: 'Please enter a number between 1 and 100!',
+                validTableNumber: 'Please enter a number between 1 and 20.',
+                validFibNumber: 'Please enter a value between 1 and 50.',
+                validGuessNumber: 'Please enter a number between 1 and 100.',
                 divideByZero: 'Division by zero is undefined.',
                 addTaskHint: 'Write text after a colon to add a task. Example: add task: science homework',
                 saveNoteHint: 'Write text after a colon to save a note. Example: note: meeting tomorrow',
-                primeHint: 'Write a number for prime checking. Example: is 17 prime?',
-                factorialHint: 'Write a number between 0 and 20 for factorial. Example: factorial of 6',
-                fibonacciHint: 'Write a length between 1 and 20 for Fibonacci. Example: 8 fibonacci',
+                primeHint: 'Enter a number to check whether it is prime. Example: is 17 prime?',
+                factorialHint: 'Enter a number between 0 and 20 for factorial. Example: factorial of 6',
+                fibonacciHint: 'Enter a length between 1 and 20 for Fibonacci. Example: 8 fibonacci',
                 notesSaved: 'AI workspace notes were saved.',
                 switchedTr: 'Language switched to Turkish.',
                 switchedEn: 'Language switched to English.',
-                discussedNone: 'There is no strong topic memory yet.',
+                discussedNone: 'No topic memory has been created yet.',
                 guideNone: 'There is no saved guide flow yet. Ask me for project, study, or planning steps.'
             }
         };
@@ -3271,7 +3279,7 @@
 
             const categoryMap = {
                 notBulma: 'productivity',
-                isBulma: 'productivity',
+                ogrenmePlani: 'productivity',
                 ucgenmi: 'math',
                 gameMenu: 'games',
                 sifreOlusturucu: 'tools',
@@ -4511,21 +4519,27 @@
             showResult('notResult', `${respond('Notlar', 'Grades')}: ${not1}, ${not2}, ${not3}<br>${respond('Ortalama', 'Average')}: ${ortalama.toFixed(2)}<br>${kategori}`, true);
         }
 
-        // 2. İş Bulma
-        function kontrolEtIsBasvurusu() {
-            const dil = document.getElementById('dilBilgisi').value;
-            const office = document.getElementById('officeBilgisi').value;
+        // 2. Öğrenme Planı
+        function olusturOgrenmePlani() {
+            const planInput = document.getElementById('planInput').value.trim();
 
-            if (!dil || !office) {
-                showResult('isResult', respond('Lutfen tum secenekleri doldurunuz!', 'Please fill in all options!'), false);
+            if (!planInput) {
+                showResult('planResult', respond('Lütfen bir veya daha fazla hedef yazın.', 'Please enter one or more goals.'), false);
                 return;
             }
 
-            if (dil === 'evet' && office === 'evet') {
-                showResult('isResult', respond('✨ Tebrikler! Ise alindiniz!<br>Basarilarinizi diliyoruz! 🎉', '✨ Congratulations! You got the job!<br>Wishing you success! 🎉'), true);
-            } else {
-                showResult('isResult', respond('⏳ Talebiniz isleme aliniyor...<br>❌ Maalesef bu sefer ise alinmadiniz. Daha sonra tekrar deneyin.', '⏳ Your request is being processed...<br>❌ You were not accepted this time. Please try again later.'), false);
+            const goals = planInput
+                .split(/\n|,/)
+                .map(item => item.trim())
+                .filter(Boolean);
+
+            if (!goals.length) {
+                showResult('planResult', respond('Lütfen geçerli hedefler girin.', 'Please enter valid goals.'), false);
+                return;
             }
+
+            const plan = goals.map((goal, index) => `${index + 1}. ${goal}<br>   • 25 dk odaklanma + 5 dk mola`).join('<br><br>');
+            showResult('planResult', respond(`📚 Plan hazır!<br><br>${plan}`, `📚 Plan is ready!<br><br>${plan}`), true);
         }
 
         // 3. Üçgen Mi?
