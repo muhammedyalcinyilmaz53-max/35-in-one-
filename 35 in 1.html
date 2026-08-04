@@ -1423,7 +1423,9 @@
                 <div class="hero-card">
                     <h2>Kontrol Paneli</h2>
                     <p>Tek ekrandan araçlarını aç, son aktivitelerini gör ve en sık kullandığın kategorilere hızlı geç.</p>
-                    <a href="http://127.0.0.1:5500/Benim%20projelerim/uyg%20a%20etiketi.html"> Uygulama Hakkında Daha Fazla Ve Detaylı Bilgi</a>
+                    <a id="aboutAppLink" href="uyg%20a%20etiketi.html?lang=tr">Uygulama Hakkında Daha Fazla Ve Detaylı Bilgi</a>
+                    <br>
+                    <a href="">Eğer "diğer uygulamamızı görmek istiyor musunuz " çalışmıyorsa tıklayınız</a>
                     <div id="homeStats" class="hero-stats"></div>
                 </div>
                 <div class="hero-sidecard">
@@ -2265,7 +2267,7 @@
                 <h2>👤 Hesap Yönetimi</h2>
             </div>
             <div class="feature-panel">
-                <p style="color: #52606d; line-height: 1.6;">
+                <p id="accountSummaryText" style="color: #52606d; line-height: 1.6;">
                     Aktif hesap: <strong id="activeAccountName">Misafir</strong>
                     &nbsp;·&nbsp;
                     Toplam hesap: <strong id="totalAccountCount">0</strong>
@@ -2274,68 +2276,68 @@
             <div class="account-grid">
                 <!-- Hesap Oluştur -->
                 <div class="extra-card">
-                    <h3>📝 Hesap Oluştur</h3>
+                    <h3 id="accountCreateTitle">📝 Hesap Oluştur</h3>
                     <div class="form-group">
-                        <label>Kullanıcı Adı <small style="color:#888">(en az 3 karakter, harf/rakam/_-.)</small></label>
+                        <label id="createAccountUsernameLabel">Kullanıcı Adı <small style="color:#888">(en az 3 karakter, harf/rakam/_-.)</small></label>
                         <input type="text" id="createAccountUsername" placeholder="ornek_kullanici" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label>Şifre <small style="color:#888">(en az 4 karakter)</small></label>
+                        <label id="createAccountPasswordLabel">Şifre <small style="color:#888">(en az 4 karakter)</small></label>
                         <input type="password" id="createAccountPassword" placeholder="Şifrenizi girin" autocomplete="new-password">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-submit" onclick="createAccount()">Hesap Oluştur</button>
+                        <button id="createAccountBtn" class="btn-submit" onclick="createAccount()">Hesap Oluştur</button>
                     </div>
                 </div>
 
                 <!-- Giriş Yap -->
                 <div class="extra-card">
-                    <h3>🔑 Hesaba Giriş Yap</h3>
+                    <h3 id="accountLoginTitle">🔑 Hesaba Giriş Yap</h3>
                     <div class="form-group">
-                        <label>Kullanıcı Adı</label>
+                        <label id="loginAccountUsernameLabel">Kullanıcı Adı</label>
                         <input type="text" id="loginAccountUsername" placeholder="Kullanıcı adınız" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <label>Şifre</label>
+                        <label id="loginAccountPasswordLabel">Şifre</label>
                         <input type="password" id="loginAccountPassword" placeholder="Şifreniz" autocomplete="current-password">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-submit" onclick="loginAccount()">Giriş Yap</button>
-                        <button class="btn-back" onclick="logoutAccount()">Çıkış Yap</button>
+                        <button id="loginAccountBtn" class="btn-submit" onclick="loginAccount()">Giriş Yap</button>
+                        <button id="logoutAccountBtn" class="btn-back" onclick="logoutAccount()">Çıkış Yap</button>
                     </div>
                 </div>
 
                 <!-- Hesap Değiştir -->
                 <div class="extra-card">
-                    <h3>🔄 Hesap Değiştir</h3>
+                    <h3 id="accountSwitchTitle">🔄 Hesap Değiştir</h3>
                     <div class="form-group">
-                        <label>Hesap Seç</label>
+                        <label id="switchAccountLabel">Hesap Seç</label>
                         <select id="switchAccountSelect"></select>
                     </div>
                     <div class="form-group">
-                        <label>Şifre Doğrulama</label>
+                        <label id="switchAccountPasswordLabel">Şifre Doğrulama</label>
                         <input type="password" id="switchAccountPassword" placeholder="Seçilen hesabın şifresi" autocomplete="off">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-submit" onclick="switchAccount()">Hesabı Değiştir</button>
+                        <button id="switchAccountBtn" class="btn-submit" onclick="switchAccount()">Hesabı Değiştir</button>
                     </div>
                 </div>
 
                 <!-- Hesap Sil -->
                 <div class="extra-card">
-                    <h3>🗑️ Aktif Hesabı Sil</h3>
-                    <p style="color:#888;font-size:13px;margin-bottom:10px;">Silmek istediğin hesaba giriş yaptıktan sonra şifreni gir.</p>
+                    <h3 id="accountDeleteTitle">🗑️ Aktif Hesabı Sil</h3>
+                    <p id="accountDeleteHint" style="color:#888;font-size:13px;margin-bottom:10px;">Silmek istediğin hesaba giriş yaptıktan sonra şifreni gir.</p>
                     <div class="form-group">
-                        <label>Şifre Doğrulama</label>
+                        <label id="deleteAccountPasswordLabel">Şifre Doğrulama</label>
                         <input type="password" id="deleteAccountPassword" placeholder="Aktif hesabın şifresi" autocomplete="off">
                     </div>
                     <div class="btn-group">
-                        <button class="btn-submit" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="deleteCurrentAccount()">Hesabı Sil</button>
+                        <button id="deleteAccountBtn" class="btn-submit" style="background:linear-gradient(135deg,#ef4444,#dc2626)" onclick="deleteCurrentAccount()">Hesabı Sil</button>
                     </div>
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-back" onclick="backToMenu()">← Geri</button>
+                <button id="accountBackBtn" class="btn-back" onclick="backToMenu()">← Geri</button>
             </div>
             <div id="accountResult" class="result-box"></div>
         </div>
@@ -2661,10 +2663,91 @@
                     tarot: '1️⃣9️⃣🃏 Tarot Karti', ayarlar: '2️⃣0️⃣⚙️ Ayarlar', aiYardimci: '2️⃣1️⃣🤖 AI Yardimci', pomodoro: '2️⃣2️⃣🍅 Pomodoro',
                     textLab: '2️⃣3️⃣✍️ Metin Lab', kararVerici: '2️⃣4️⃣🎲 Karar Verici', hesapYonetimi: '2️⃣5️⃣👤 Hesap Yonetimi', extraFeatures: '2️⃣6️⃣ 🆕 10 Yeni Ozellik'
                 },
-                settings: { language: 'Dil:', theme: 'Tema:', fontSize: 'Yazi Boyutu:', reduceMotion: 'Animasyonlari azalt', showSeconds: 'Saatte saniyeleri goster', sound: 'Sesli bildirimleri ac', save: 'Kaydet', reset: 'Sifirla' },
+                common: { back: 'Geri', start: 'Başlat', reset: 'Sıfırla', calculate: 'Hesapla', create: 'Oluştur', generate: 'Oluştur', clear: 'Temizle', save: 'Kaydet', show: 'Göster', convert: 'Dönüştür', check: 'Kontrol Et', add: 'Ekle', send: 'Gönder', refresh: 'Yenile', select: 'Seçin', createPlan: 'Plan Oluştur', createPassword: 'Şifre Oluştur', drawCard: 'Kart Çek' },
+                sections: {
+                    notBulmaTitle: '📊 Not Bulma - Ortalama Hesapla', notBulmaLabel1: '1. Not (0-100):', notBulmaLabel2: '2. Not (0-100):', notBulmaLabel3: '3. Not (0-100):',
+                    ogrenmePlaniTitle: '🧠 Öğrenme Planı Oluşturucu', ogrenmePlaniLabel: 'Hedeflerini yazın (virgül veya yeni satırla ayırın):', ogrenmePlaniPlaceholder: 'Matematik, yazılım, İngilizce, proje hazırlığı',
+                    ucgenmiTitle: '📐 Üçgen Doğrulama', ucgenmiLabel1: '1. Açı (°):', ucgenmiLabel2: '2. Açı (°):', ucgenmiLabel3: '3. Açı (°):',
+                    gameMenuTitle: '🎮 Oyun Menüsü', gameStatsTitle: 'Oyun İstatistikleri', quizTitle: '❓ Bilgi Yarışması - 5 Saniye Kuralı', quizCategoryLabel: 'Kategori Seçin:', quizPlaceholder: 'Kategori seçince yarışma tek tek sorularla başlayacak.',
+                    cardGameTitle: '🃏 Gizemli Tüccar - Kart Oyunu', cardGameLabel: 'Kartınızı Seçin:', minecraftTitle: '💀 Minecraft Hata Simülatörü', minecraftText: 'Hata simüle etmek için butona tıklayın...', diceTitle: '🎲 Zar Atma Oyunu', diceText: 'Siz ve bilgisayar sırayla zar atacaksınız. En yüksek sayıyı atan kazanır!', rpsTitle: '✋ Taş Kağıt Makas Oyunu',
+                    passwordTitle: '🔐 Şifre Oluşturucu', passwordLabel: 'Şifre Uzunluğu (4-50):', passwordPlaceholder: 'Şifre uzunluğunu girin', writingTitle: '⌨️ Yazı Alıştırması - Stres Atma', writingLabel: 'Yazı girin ve Enter tuşlayın:', writingPlaceholder: 'Yazı yazmak için buraya tıklayın...', calculatorTitle: '🧮 Tuşlu Hesap Makinesi', mathMenuTitle: '📐 Matematik Menüsü', mathHistoryTitle: 'Matematik Geçmişi', bmiTitle: '⚖️ BMI Hesaplayıcı', bmiLabel1: 'Kilo (kg):', bmiLabel2: 'Boy (m):', tempTitle: '🌡️ Sıcaklık Dönüştürücü', tempLabel1: 'Dönüşüm Tipi:', tempLabel2: 'Sıcaklık:', multiplicationTitle: '✖️ Çarpım Tablosu', multiplicationLabel: 'Sayı (1-20):', fibonacciTitle: '🔢 Fibonacci Serisi', fibonacciLabel: 'Kaç Term?', primeTitle: '🔍 Asal Sayı Kontrolü', primeLabel: 'Sayı:', guessTitle: '🎯 Sayı Tahmin Oyunu', guessText: '1-100 arasında bir sayı tahmin etmeye çalışın!', jokeTitle: '😂 Rastgele Şaka', quoteTitle: '💡 Rastgele Alıntı', wordTitle: '📝 Kelime/Karakter Sayacı', wordLabel: 'Metin girin:', dateTitle: '🕐 Saat ve Tarih', ageTitle: '🎂 Yaş Hesaplayıcı', ageLabel: 'Doğum Tarihi:', currencyTitle: '💱 Para Birimi Dönüştürücü', currencyLabel1: 'Tutar (TRY):', currencyLabel2: 'Dönüştürülecek Para Birimi:', factorialTitle: '🔢 Faktöriyel Hesaplama', factorialLabel: 'Sayı (0-20):', colorTitle: '🎨 Rastgele Renk Üretici', timezoneTitle: '🌍 Dünya Saatleri', qrTitle: '📱 Çevrimdışı Kod Oluşturucu', qrLabel: 'Metin veya Bağlantı:', stopwatchTitle: '⏱️ Stopwatch', tarotTitle: '🃏 Tarot Kartı', tarotText: 'Bugünün mesajını görmek için kart çekin.', settingsTitle: '⚙️ Uygulama Ayarları', accountTitle: '👤 Hesap Yönetimi', accountSummaryActive: 'Aktif hesap:', accountSummaryTotal: 'Toplam hesap:', accountCreateTitle: '📝 Hesap Oluştur', accountCreateUserLabel: 'Kullanıcı Adı', accountCreateUserHint: 'en az 3 karakter, harf/rakam/_-.', accountCreateUserPlaceholder: 'ornek_kullanici', accountCreatePasswordLabel: 'Şifre', accountCreatePasswordHint: 'en az 4 karakter', accountCreatePasswordPlaceholder: 'Şifrenizi girin', accountCreateButton: 'Hesap Oluştur', accountLoginTitle: '🔑 Hesaba Giriş Yap', accountLoginUserLabel: 'Kullanıcı Adı', accountLoginUserPlaceholder: 'Kullanıcı adınız', accountLoginPasswordLabel: 'Şifre', accountLoginPasswordPlaceholder: 'Şifreniz', accountLoginButton: 'Giriş Yap', accountLogoutButton: 'Çıkış Yap', accountSwitchTitle: '🔄 Hesap Değiştir', accountSwitchLabel: 'Hesap Seç', accountSwitchPasswordLabel: 'Şifre Doğrulama', accountSwitchPasswordPlaceholder: 'Seçilen hesabın şifresi', accountSwitchButton: 'Hesabı Değiştir', accountDeleteTitle: '🗑️ Aktif Hesabı Sil', accountDeleteHint: 'Silmek istediğin hesaba giriş yaptıktan sonra şifreni gir.', accountDeletePasswordLabel: 'Şifre Doğrulama', accountDeletePasswordPlaceholder: 'Aktif hesabın şifresi', accountDeleteButton: 'Hesabı Sil', aiTitle: '🤖 AI Yardımcı', aiPromptLabel: 'Mesajınız:', aiTaskTitle: 'Görev Listesi', aiTaskPlaceholder: 'Yeni görev yazın...', aiNotesTitle: 'Hızlı Notlar', aiNotesPlaceholder: 'Kısa notlarınızı burada tutun...', pomodoroTitle: '🍅 Pomodoro Odak Zamanlayıcı', pomodoroFocusLabel: 'Odak Süresi (dk):', pomodoroBreakLabel: 'Mola Süresi (dk):', textLabTitle: '✍️ Metin Laboratuvarı', textLabInputLabel: 'Metin Girin:', textLabActionLabel: 'İşlem Seçin:', decisionTitle: '🎲 Karar Verici', decisionLabel: 'Seçenekler (virgülle ayırın):' },
+                    settings: { language: 'Dil:', theme: 'Tema:', fontSize: 'Yazi Boyutu:', reduceMotion: 'Animasyonlari azalt', showSeconds: 'Saatte saniyeleri goster', sound: 'Sesli bildirimleri ac', save: 'Kaydet', reset: 'Sifirla' },
                 pomodoro: { title: '🍅 Pomodoro Odak Zamanlayici', focus: 'Odak Suresi (dk):', break: 'Mola Suresi (dk):', ready: 'Odak oturumu hazir', active: 'Odak zamani', breakActive: 'Mola zamani', start: 'Baslat', pause: 'Duraklat', skip: 'Fazi Gec' },
                 textLab: { title: '✍️ Metin Laboratuvari', input: 'Metin Girin:', action: 'Islem Secin:', run: 'Uygula' },
                 decision: { title: '🎲 Karar Verici', input: 'Secenekler (virgulle ayirin):', pick: 'Rastgele Sec', shuffle: 'Karistir' },
+                home: {
+                    aboutLink: 'Uygulama hakkında daha fazla bilgi almak için buraya tıklayın',
+                    otherAppLink: 'Eğer “diğer uygulamamızı gör” bağlantısı çalışmıyorsa buraya tıklayın',
+                    insightTitle: 'Bugün Ne Yapmak İstersin?',
+                    insightText: 'Oyunlar, üretkenlik araçları ve hızlı hesaplamalar burada birlikte çalışır.',
+                    quickHubTitle: 'Hızlı Merkez',
+                    connectionOnline: 'Çevrimiçi',
+                    connectionOffline: 'Çevrimdışı',
+                    accountManage: 'Hesap Yönetimi',
+                    installApp: 'Telefonda Uygulama Olarak Kur',
+                    shareApp: 'Uygulamayı Paylaş',
+                    backupData: 'Yedek Al',
+                    restoreData: 'Yedeği Geri Yükle',
+                    clearData: 'Tüm Veriyi Temizle',
+                    installHint: 'Eğer görünürse kur seçeneğini kullanarak uygulamayı ana ekrana ekleyebilirsin.',
+                    quickAccessEmpty: 'Uygulamayı kullandıkça favorilerin ve en çok açılan araçların burada görünür.',
+                    extrasTitle: '🆕 15 yeni özellik (bazıları yeni oldukları için sorun yaşayabilir)',
+                    notifyHint: 'Tarayıcından bildirim izni ver ve bir test bildirimi gönder.',
+                    open: 'Aç'
+                },
+                extras: {
+                    rngTitle: '1. Rastgele Sayı Üretici',
+                    countdownTitle: '2. Geri Sayım Zamanlayıcısı',
+                    binaryTitle: '3. İkili/Onluk Dönüştürücü',
+                    romanTitle: '4. Roma Rakamı Dönüştürücü',
+                    tipTitle: '5. Bahşiş Hesaplayıcı',
+                    urlTitle: '6. URL Kodlayıcı / Çözücü',
+                    strengthTitle: '7. Şifre Gücü Analizi',
+                    loanTitle: '8. Kredi / Taksit Hesaplayıcı',
+                    waterTitle: '9. Su Takibi',
+                    habitTitle: '10. Alışkanlık Takibi',
+                    notifyTitle: '11. Bildirim Testi',
+                    jsonTitle: '12. JSON Düzenleyici',
+                    baseTitle: '13. Taban Dönüştürücü',
+                    teamTitle: '14. Rastgele Ekip Oluşturucu',
+                    ttsTitle: '15. Metni Sesli Okuma',
+                    min: 'Min',
+                    max: 'Max',
+                    seconds: 'Saniye',
+                    binaryPlaceholder: '1010 veya 42',
+                    romanPlaceholder: '1-3999',
+                    tipAmount: 'Tutar',
+                    tipPercent: '%',
+                    urlPlaceholder: 'Metin veya URL girin...',
+                    strengthPlaceholder: 'Şifrenizi yazın...',
+                    loanAmount: 'Tutar',
+                    loanRate: 'Aylık %',
+                    loanMonths: 'Ay',
+                    habitPlaceholder: 'ör. Bir kitap oku',
+                    jsonPlaceholder: '{"isim":"Ali","yas":14}',
+                    basePlaceholder: 'ör. FF veya 1010',
+                    baseFrom: 'Kaynak taban',
+                    baseTo: 'Hedef taban',
+                    teamPlaceholder: 'Ali, Veli, Ayşe, Fatma',
+                    teamCount: 'Takım sayısı',
+                    ttsPlaceholder: 'Seslendirmek istediğin metni yaz...',
+                    buttonGenerate: 'Üret',
+                    buttonStart: 'Başlat',
+                    buttonReset: 'Sıfırla',
+                    buttonConvert: 'Dönüştür',
+                    buttonEncode: 'Kodla',
+                    buttonDecode: 'Çöz',
+                    buttonCheck: 'Kontrol Et',
+                    buttonAdd: 'Ekle',
+                    buttonComplete: 'Bugün Bitti',
+                    buttonAllow: 'İzin Ver',
+                    buttonTest: 'Test Gönder',
+                    buttonFormat: 'Düzenle',
+                    buttonMinify: 'Kısalt',
+                    buttonCreateTeams: 'Ekip Oluştur',
+                    buttonSpeak: 'Seslendir',
+                    buttonStop: 'Durdur'
+                },
                 quick: ['Neler yapabiliyor?', 'Sifre oner', 'Matematik menusu', 'Kisa tavsiye', 'Gorev ekle', 'Not al']
             },
             en: {
@@ -2711,9 +2794,90 @@
                     extraFeatures: '2️⃣6️⃣ 🆕 10 New Features'
                 },
                 settings: { language: 'Language:', theme: 'Theme:', fontSize: 'Font Size:', reduceMotion: 'Reduce motion', showSeconds: 'Show seconds on the clock', sound: 'Enable sound notifications', save: 'Save', reset: 'Reset' },
+                common: { back: 'Back', start: 'Start', reset: 'Reset', calculate: 'Calculate', create: 'Create', generate: 'Generate', clear: 'Clear', save: 'Save', show: 'Show', convert: 'Convert', check: 'Check', add: 'Add', send: 'Send', refresh: 'Refresh', select: 'Select', createPlan: 'Create Plan', createPassword: 'Create Password', drawCard: 'Draw Card' },
+                sections: {
+                    notBulmaTitle: '📊 Grade Average - Calculate Average', notBulmaLabel1: '1st Grade (0-100):', notBulmaLabel2: '2nd Grade (0-100):', notBulmaLabel3: '3rd Grade (0-100):',
+                    ogrenmePlaniTitle: '🧠 Study Plan Creator', ogrenmePlaniLabel: 'Write your goals (separated by commas or new lines):', ogrenmePlaniPlaceholder: 'Math, software, English, project preparation',
+                    ucgenmiTitle: '📐 Triangle Check', ucgenmiLabel1: '1st Angle (°):', ucgenmiLabel2: '2nd Angle (°):', ucgenmiLabel3: '3rd Angle (°):',
+                    gameMenuTitle: '🎮 Game Menu', gameStatsTitle: 'Game Statistics', quizTitle: '❓ Quiz Challenge - 5 Second Rule', quizCategoryLabel: 'Choose a Category:', quizPlaceholder: 'Choose a category to start the quiz one question at a time.',
+                    cardGameTitle: '🃏 Mysterious Merchant - Card Game', cardGameLabel: 'Choose Your Card:', minecraftTitle: '💀 Minecraft Error Simulator', minecraftText: 'Click the button to simulate an error...', diceTitle: '🎲 Dice Game', diceText: 'You and the computer take turns rolling. The highest roll wins!', rpsTitle: '✋ Rock Paper Scissors',
+                    passwordTitle: '🔐 Password Generator', passwordLabel: 'Password Length (4-50):', passwordPlaceholder: 'Enter password length', writingTitle: '⌨️ Writing Practice - Stress Relief', writingLabel: 'Type your text and press Enter:', writingPlaceholder: 'Click here to start writing...', calculatorTitle: '🧮 Calculator', mathMenuTitle: '📐 Math Menu', mathHistoryTitle: 'Math History', bmiTitle: '⚖️ BMI Calculator', bmiLabel1: 'Weight (kg):', bmiLabel2: 'Height (m):', tempTitle: '🌡️ Temperature Converter', tempLabel1: 'Conversion Type:', tempLabel2: 'Temperature:', multiplicationTitle: '✖️ Multiplication Table', multiplicationLabel: 'Number (1-20):', fibonacciTitle: '🔢 Fibonacci Series', fibonacciLabel: 'How many terms?', primeTitle: '🔍 Prime Number Check', primeLabel: 'Number:', guessTitle: '🎯 Number Guessing Game', guessText: 'Try to guess a number between 1 and 100!', jokeTitle: '😂 Random Joke', quoteTitle: '💡 Random Quote', wordTitle: '📝 Word/Character Counter', wordLabel: 'Enter text:', dateTitle: '🕐 Date and Time', ageTitle: '🎂 Age Calculator', ageLabel: 'Birth Date:', currencyTitle: '💱 Currency Converter', currencyLabel1: 'Amount (TRY):', currencyLabel2: 'Target Currency:', factorialTitle: '🔢 Factorial Calculator', factorialLabel: 'Number (0-20):', colorTitle: '🎨 Random Color Generator', timezoneTitle: '🌍 World Clocks', qrTitle: '📱 Offline Code Generator', qrLabel: 'Text or Link:', stopwatchTitle: '⏱️ Stopwatch', tarotTitle: '🃏 Tarot Card', tarotText: 'Draw a card to reveal today\'s message.', settingsTitle: '⚙️ App Settings', accountTitle: '👤 Account Management', accountSummaryActive: 'Active account:', accountSummaryTotal: 'Total accounts:', accountCreateTitle: '📝 Create Account', accountCreateUserLabel: 'Username', accountCreateUserHint: 'at least 3 characters, letters/numbers/_-.', accountCreateUserPlaceholder: 'example_user', accountCreatePasswordLabel: 'Password', accountCreatePasswordHint: 'at least 4 characters', accountCreatePasswordPlaceholder: 'Enter your password', accountCreateButton: 'Create Account', accountLoginTitle: '🔑 Log In', accountLoginUserLabel: 'Username', accountLoginUserPlaceholder: 'Your username', accountLoginPasswordLabel: 'Password', accountLoginPasswordPlaceholder: 'Your password', accountLoginButton: 'Log In', accountLogoutButton: 'Log Out', accountSwitchTitle: '🔄 Switch Account', accountSwitchLabel: 'Select Account', accountSwitchPasswordLabel: 'Password Verification', accountSwitchPasswordPlaceholder: 'Selected account password', accountSwitchButton: 'Switch Account', accountDeleteTitle: '🗑️ Delete Active Account', accountDeleteHint: 'After logging into the account you want to delete, enter your password.', accountDeletePasswordLabel: 'Password Verification', accountDeletePasswordPlaceholder: 'Active account password', accountDeleteButton: 'Delete Account', aiTitle: '🤖 AI Assistant', aiPromptLabel: 'Your Message:', aiTaskTitle: 'Task List', aiTaskPlaceholder: 'Write a new task...', aiNotesTitle: 'Quick Notes', aiNotesPlaceholder: 'Keep your short notes here...', pomodoroTitle: '🍅 Pomodoro Focus Timer', pomodoroFocusLabel: 'Focus Length (min):', pomodoroBreakLabel: 'Break Length (min):', textLabTitle: '✍️ Text Lab', textLabInputLabel: 'Enter Text:', textLabActionLabel: 'Choose Action:', decisionTitle: '🎲 Decision Picker', decisionLabel: 'Options (comma-separated):' },
                 pomodoro: { title: '🍅 Pomodoro Focus Timer', focus: 'Focus Length (min):', break: 'Break Length (min):', ready: 'Focus session ready', active: 'Focus time', breakActive: 'Break time', start: 'Start', pause: 'Pause', skip: 'Skip Phase' },
                 textLab: { title: '✍️ Text Lab', input: 'Enter Text:', action: 'Choose Action:', run: 'Run' },
                 decision: { title: '🎲 Decision Picker', input: 'Options (comma-separated):', pick: 'Pick Random', shuffle: 'Shuffle' },
+                home: {
+                    aboutLink: 'Learn more about the app and see detailed information',
+                    otherAppLink: 'If the “see our other app” link is not working, click here',
+                    insightTitle: 'What Would You Like to Do Today?',
+                    insightText: 'Games, productivity tools, and quick calculations work together here.',
+                    quickHubTitle: 'Quick Center',
+                    connectionOnline: 'Online',
+                    connectionOffline: 'Offline',
+                    accountManage: 'Account Management',
+                    installApp: 'Install as App on Phone',
+                    shareApp: 'Share App',
+                    backupData: 'Backup',
+                    restoreData: 'Restore Backup',
+                    clearData: 'Clear All Data',
+                    installHint: 'Use the install option if it appears so you can add the app to your home screen.',
+                    quickAccessEmpty: 'As you use the app, your favorites and most-opened tools will appear here.',
+                    extrasTitle: '🆕 15 new features (some may have issues because they are new)',
+                    notifyHint: 'Grant notification permission in your browser and send a test notification.',
+                    open: 'Open'
+                },
+                extras: {
+                    rngTitle: '1. Random Number Generator',
+                    countdownTitle: '2. Countdown Timer',
+                    binaryTitle: '3. Binary/Decimal Converter',
+                    romanTitle: '4. Roman Numeral Converter',
+                    tipTitle: '5. Tip Calculator',
+                    urlTitle: '6. URL Encoder / Decoder',
+                    strengthTitle: '7. Password Strength Analysis',
+                    loanTitle: '8. Loan / Installment Calculator',
+                    waterTitle: '9. Water Tracker',
+                    habitTitle: '10. Habit Tracker',
+                    notifyTitle: '11. Notification Test',
+                    jsonTitle: '12. JSON Formatter',
+                    baseTitle: '13. Base Converter',
+                    teamTitle: '14. Random Team Creator',
+                    ttsTitle: '15. Text to Speech',
+                    min: 'Min',
+                    max: 'Max',
+                    seconds: 'Seconds',
+                    binaryPlaceholder: '1010 or 42',
+                    romanPlaceholder: '1-3999',
+                    tipAmount: 'Amount',
+                    tipPercent: '%',
+                    urlPlaceholder: 'Enter text or URL...',
+                    strengthPlaceholder: 'Type your password...',
+                    loanAmount: 'Amount',
+                    loanRate: 'Monthly %',
+                    loanMonths: 'Months',
+                    habitPlaceholder: 'e.g. Read a book',
+                    jsonPlaceholder: '{"name":"Ali","age":14}',
+                    basePlaceholder: 'e.g. FF or 1010',
+                    baseFrom: 'Source base',
+                    baseTo: 'Target base',
+                    teamPlaceholder: 'Ali, Veli, Ayşe, Fatma',
+                    teamCount: 'Team count',
+                    ttsPlaceholder: 'Write the text you want to speak...',
+                    buttonGenerate: 'Generate',
+                    buttonStart: 'Start',
+                    buttonReset: 'Reset',
+                    buttonConvert: 'Convert',
+                    buttonEncode: 'Encode',
+                    buttonDecode: 'Decode',
+                    buttonCheck: 'Check',
+                    buttonAdd: 'Add',
+                    buttonComplete: 'Done Today',
+                    buttonAllow: 'Allow',
+                    buttonTest: 'Send Test',
+                    buttonFormat: 'Format',
+                    buttonMinify: 'Minify',
+                    buttonCreateTeams: 'Create Teams',
+                    buttonSpeak: 'Speak',
+                    buttonStop: 'Stop'
+                },
                 quick: ['What can you do?', 'Suggest a password', 'Math menu', 'Quick advice', 'Add task', 'Save note']
             }
         };
@@ -2940,13 +3104,17 @@
 
         function renderAccountSummary() {
             try {
-                const active = accountState.activeUser || 'Misafir';
+                const active = accountState.activeUser || (appSettings.language === 'en' ? 'Guest' : 'Misafir');
                 const activeNode = document.getElementById('activeAccountName');
                 const totalNode = document.getElementById('totalAccountCount');
                 const stripNode = document.getElementById('activeAccountText');
+                const summaryTextNode = document.getElementById('accountSummaryText');
                 if (activeNode) activeNode.innerText = active;
                 if (totalNode) totalNode.innerText = String(accountState.users.length);
-                if (stripNode) stripNode.innerText = 'Aktif hesap: ' + active;
+                if (summaryTextNode) {
+                    summaryTextNode.innerHTML = `${appSettings.language === 'en' ? 'Active account:' : 'Aktif hesap:'} <strong id="activeAccountName">${active}</strong> · ${appSettings.language === 'en' ? 'Total accounts:' : 'Toplam hesap:'} <strong id="totalAccountCount">${accountState.users.length}</strong>`;
+                }
+                if (stripNode) stripNode.innerText = `${appSettings.language === 'en' ? 'Active account:' : 'Aktif hesap:'} ${active}`;
             } catch (e) { console.warn('renderAccountSummary hata:', e); }
         }
 
@@ -2958,7 +3126,7 @@
                 if (!accountState.users.length) {
                     const opt = document.createElement('option');
                     opt.value = '';
-                    opt.innerText = 'Kayıtlı hesap yok';
+                    opt.innerText = appSettings.language === 'en' ? 'No saved accounts' : 'Kayıtlı hesap yok';
                     select.appendChild(opt);
                     return;
                 }
@@ -3183,12 +3351,26 @@
 
         function applyLanguage() {
             const locale = appSettings.language === 'en' ? 'en' : 'tr';
+            const isEnglish = appSettings.language === 'en';
             document.documentElement.lang = locale;
             document.title = tl('title');
             document.querySelector('.header h1').innerText = tl('headerTitle');
             document.querySelector('.header p').innerText = tl('headerSubtitle');
             document.querySelector('.hero-card h2').innerText = tl('dashboardTitle');
             document.querySelector('.hero-card p').innerText = tl('dashboardText');
+            const aboutAppLink = document.getElementById('aboutAppLink');
+            if (aboutAppLink) {
+                aboutAppLink.href = `uyg%20a%20etiketi.html?lang=${isEnglish ? 'en' : 'tr'}`;
+                aboutAppLink.innerText = tl('home.aboutLink');
+            }
+            const otherAppLink = document.querySelector('#mainMenu a[href=""]');
+            if (otherAppLink) {
+                otherAppLink.innerText = tl('home.otherAppLink');
+            }
+            const homeInsightTitle = document.querySelector('.hero-sidecard h3');
+            if (homeInsightTitle) homeInsightTitle.innerText = tl('home.insightTitle');
+            const homeInsightText = document.getElementById('homeInsightText');
+            if (homeInsightText) homeInsightText.innerText = tl('home.insightText');
             document.getElementById('menuSearchInput').placeholder = tl('search');
             document.getElementById('menuEmptyState').innerText = tl('empty');
             const chips = document.querySelectorAll('#categoryChips .category-chip');
@@ -3202,6 +3384,123 @@
             document.querySelector('label[for="soundNotifyToggle"]').innerText = tl('settings.sound');
             document.querySelectorAll('#ayarlar .btn-submit')[0].innerText = tl('settings.save');
             document.querySelectorAll('#ayarlar .btn-submit')[1].innerText = tl('settings.reset');
+            const accountSummaryText = document.getElementById('accountSummaryText');
+            if (accountSummaryText) {
+                const active = accountState.activeUser || (appSettings.language === 'en' ? 'Guest' : 'Misafir');
+                const total = String(accountState.users.length);
+                accountSummaryText.innerHTML = `${tl('sections.accountSummaryActive')} <strong id="activeAccountName">${active}</strong> · ${tl('sections.accountSummaryTotal')} <strong id="totalAccountCount">${total}</strong>`;
+            }
+            document.querySelector('#hesapYonetimi .content-header h2').innerText = tl('sections.accountTitle');
+            const createAccountTitle = document.getElementById('accountCreateTitle');
+            if (createAccountTitle) createAccountTitle.innerText = tl('sections.accountCreateTitle');
+            const createUserLabel = document.getElementById('createAccountUsernameLabel');
+            if (createUserLabel) createUserLabel.innerText = `${tl('sections.accountCreateUserLabel')} <small style="color:#888">(${tl('sections.accountCreateUserHint')})</small>`;
+            document.getElementById('createAccountUsername').placeholder = tl('sections.accountCreateUserPlaceholder');
+            const createPasswordLabel = document.getElementById('createAccountPasswordLabel');
+            if (createPasswordLabel) createPasswordLabel.innerText = `${tl('sections.accountCreatePasswordLabel')} <small style="color:#888">(${tl('sections.accountCreatePasswordHint')})</small>`;
+            document.getElementById('createAccountPassword').placeholder = tl('sections.accountCreatePasswordPlaceholder');
+            const createAccountBtn = document.getElementById('createAccountBtn');
+            if (createAccountBtn) createAccountBtn.innerText = tl('sections.accountCreateButton');
+            const loginTitle = document.getElementById('accountLoginTitle');
+            if (loginTitle) loginTitle.innerText = tl('sections.accountLoginTitle');
+            const loginUserLabel = document.getElementById('loginAccountUsernameLabel');
+            if (loginUserLabel) loginUserLabel.innerText = tl('sections.accountLoginUserLabel');
+            document.getElementById('loginAccountUsername').placeholder = tl('sections.accountLoginUserPlaceholder');
+            const loginPasswordLabel = document.getElementById('loginAccountPasswordLabel');
+            if (loginPasswordLabel) loginPasswordLabel.innerText = tl('sections.accountLoginPasswordLabel');
+            document.getElementById('loginAccountPassword').placeholder = tl('sections.accountLoginPasswordPlaceholder');
+            document.getElementById('loginAccountBtn').innerText = tl('sections.accountLoginButton');
+            document.getElementById('logoutAccountBtn').innerText = tl('sections.accountLogoutButton');
+            const switchTitle = document.getElementById('accountSwitchTitle');
+            if (switchTitle) switchTitle.innerText = tl('sections.accountSwitchTitle');
+            const switchLabel = document.getElementById('switchAccountLabel');
+            if (switchLabel) switchLabel.innerText = tl('sections.accountSwitchLabel');
+            const switchPasswordLabel = document.getElementById('switchAccountPasswordLabel');
+            if (switchPasswordLabel) switchPasswordLabel.innerText = tl('sections.accountSwitchPasswordLabel');
+            document.getElementById('switchAccountPassword').placeholder = tl('sections.accountSwitchPasswordPlaceholder');
+            document.getElementById('switchAccountBtn').innerText = tl('sections.accountSwitchButton');
+            const deleteTitle = document.getElementById('accountDeleteTitle');
+            if (deleteTitle) deleteTitle.innerText = tl('sections.accountDeleteTitle');
+            const deleteHint = document.getElementById('accountDeleteHint');
+            if (deleteHint) deleteHint.innerText = tl('sections.accountDeleteHint');
+            const deletePasswordLabel = document.getElementById('deleteAccountPasswordLabel');
+            if (deletePasswordLabel) deletePasswordLabel.innerText = tl('sections.accountDeletePasswordLabel');
+            document.getElementById('deleteAccountPassword').placeholder = tl('sections.accountDeletePasswordPlaceholder');
+            document.getElementById('deleteAccountBtn').innerText = tl('sections.accountDeleteButton');
+            document.getElementById('accountBackBtn').innerText = tl('common.back');
+            document.querySelector('#notBulma .content-header h2').innerText = tl('sections.notBulmaTitle');
+            document.querySelectorAll('#notBulma .form-group label').forEach((label, index) => {
+                const mappings = [tl('sections.notBulmaLabel1'), tl('sections.notBulmaLabel2'), tl('sections.notBulmaLabel3')];
+                if (mappings[index]) label.innerText = mappings[index];
+            });
+            document.querySelector('#ogrenmePlani .content-header h2').innerText = tl('sections.ogrenmePlaniTitle');
+            document.querySelector('#ogrenmePlani label').innerText = tl('sections.ogrenmePlaniLabel');
+            document.getElementById('planInput').placeholder = tl('sections.ogrenmePlaniPlaceholder');
+            document.querySelector('#ucgenmi .content-header h2').innerText = tl('sections.ucgenmiTitle');
+            document.querySelectorAll('#ucgenmi .form-group label').forEach((label, index) => {
+                const mappings = [tl('sections.ucgenmiLabel1'), tl('sections.ucgenmiLabel2'), tl('sections.ucgenmiLabel3')];
+                if (mappings[index]) label.innerText = mappings[index];
+            });
+            document.querySelector('#gameMenu .content-header h2').innerText = tl('sections.gameMenuTitle');
+            document.querySelector('#gameMenu .history-panel h3').innerText = tl('sections.gameStatsTitle');
+            const gameMenuButtons = document.querySelectorAll('#gameMenu .game-menu-btn');
+            const gameMenuLabels = isEnglish ? ['Quiz', 'Card Game', 'Minecraft', 'Dice', 'Rock Paper Scissors', 'Guess Number'] : ['Bilgi Yarışması', 'Kart Oyunu', 'Minecraft', 'Zar Atma', 'Taş Kağıt Makas', 'Sayı Tahmin'];
+            gameMenuButtons.forEach((btn, index) => { if (gameMenuLabels[index]) btn.innerText = gameMenuLabels[index]; });
+            document.querySelector('#bilgiYarismasi .content-header h2').innerText = tl('sections.quizTitle');
+            document.querySelector('#bilgiYarismasi label').innerText = tl('sections.quizCategoryLabel');
+            document.querySelector('#quizContent p').innerText = tl('sections.quizPlaceholder');
+            document.querySelector('#kartOyunu .content-header h2').innerText = tl('sections.cardGameTitle');
+            document.querySelector('#kartOyunu label').innerText = tl('sections.cardGameLabel');
+            document.querySelector('#minecraftSimulator .content-header h2').innerText = tl('sections.minecraftTitle');
+            document.querySelector('#minecraftSimulator p').innerText = tl('sections.minecraftText');
+            document.querySelector('#zarOyunu .content-header h2').innerText = tl('sections.diceTitle');
+            document.querySelector('#zarOyunu p').innerText = tl('sections.diceText');
+            document.querySelector('#tasKagitMakas .content-header h2').innerText = tl('sections.rpsTitle');
+            document.querySelector('#sifreOlusturucu .content-header h2').innerText = tl('sections.passwordTitle');
+            document.querySelector('#sifreOlusturucu label').innerText = tl('sections.passwordLabel');
+            document.getElementById('sifreUzunluk').placeholder = tl('sections.passwordPlaceholder');
+            document.querySelector('#yaziAlistiramasi .content-header h2').innerText = tl('sections.writingTitle');
+            document.querySelector('#yaziAlistiramasi label').innerText = tl('sections.writingLabel');
+            document.getElementById('yaziBolumu').placeholder = tl('sections.writingPlaceholder');
+            document.querySelector('#hesapMakinesi .content-header h2').innerText = tl('sections.calculatorTitle');
+            document.querySelector('#mathMenu .content-header h2').innerText = tl('sections.mathMenuTitle');
+            document.querySelector('#mathMenu .history-panel h3').innerText = tl('sections.mathHistoryTitle');
+            document.querySelector('#bmiHesapla .content-header h2').innerText = tl('sections.bmiTitle');
+            document.querySelectorAll('#bmiHesapla .form-group label').forEach((label, index) => {
+                const mappings = [tl('sections.bmiLabel1'), tl('sections.bmiLabel2')];
+                if (mappings[index]) label.innerText = mappings[index];
+            });
+            document.querySelector('#sicaklikDonustur .content-header h2').innerText = tl('sections.tempTitle');
+            document.querySelectorAll('#sicaklikDonustur .form-group label').forEach((label, index) => {
+                const mappings = [tl('sections.tempLabel1'), tl('sections.tempLabel2')];
+                if (mappings[index]) label.innerText = mappings[index];
+            });
+            document.querySelector('#carpimTablosu .content-header h2').innerText = tl('sections.multiplicationTitle');
+            document.querySelector('#carpimTablosu label').innerText = tl('sections.multiplicationLabel');
+            document.querySelector('#fibonacci .content-header h2').innerText = tl('sections.fibonacciTitle');
+            document.querySelector('#fibonacci label').innerText = tl('sections.fibonacciLabel');
+            document.querySelector('#asalSayiKontrol .content-header h2').innerText = tl('sections.primeTitle');
+            document.querySelector('#asalSayiKontrol label').innerText = tl('sections.primeLabel');
+            document.querySelector('#sayiTahmini .content-header h2').innerText = tl('sections.guessTitle');
+            document.querySelector('#sayiTahmini p').innerText = tl('sections.guessText');
+            document.querySelector('#sakaOlustur .content-header h2').innerText = tl('sections.jokeTitle');
+            document.querySelector('#rasgeleAlintilar .content-header h2').innerText = tl('sections.quoteTitle');
+            document.querySelector('#kelimeSayisi .content-header h2').innerText = tl('sections.wordTitle');
+            document.querySelector('#kelimeSayisi label').innerText = tl('sections.wordLabel');
+            document.querySelector('#saatTarih .content-header h2').innerText = tl('sections.dateTitle');
+            document.querySelector('#yasHesapla .content-header h2').innerText = tl('sections.ageTitle');
+            document.querySelector('#yasHesapla label').innerText = tl('sections.ageLabel');
+            document.querySelector('#paraBirim .content-header h2').innerText = tl('sections.currencyTitle');
+            document.querySelectorAll('#paraBirim .form-group label').forEach((label, index) => {
+                const mappings = [tl('sections.currencyLabel1'), tl('sections.currencyLabel2')];
+                if (mappings[index]) label.innerText = mappings[index];
+            });
+            document.querySelector('#factorial .content-header h2').innerText = tl('sections.factorialTitle');
+            document.querySelector('#factorial label').innerText = tl('sections.factorialLabel');
+            document.querySelector('#renk .content-header h2').innerText = tl('sections.colorTitle');
+            document.querySelector('#zamanDilimi .content-header h2').innerText = tl('sections.timezoneTitle');
+            document.querySelector('#qrKod .content-header h2').innerText = tl('sections.qrTitle');
+            document.querySelector('#qrKod label').innerText = tl('sections.qrLabel');
             document.querySelector('#pomodoro .content-header h2').innerText = tl('pomodoro.title');
             document.getElementById('pomodoroFocusLabel').innerText = tl('pomodoro.focus');
             document.getElementById('pomodoroBreakLabel').innerText = tl('pomodoro.break');
@@ -3219,8 +3518,111 @@
             document.getElementById('decisionOptions').placeholder = appSettings.language === 'en' ? 'Pizza, Pasta, Salad' : 'Pizza, Makarna, Salata';
             document.getElementById('qrMetni').placeholder = appSettings.language === 'en' ? 'Enter text or URL' : 'https://example.com veya metin girin';
             document.getElementById('stopwatchToggleBtn').innerText = appSettings.language === 'en' ? 'Start' : 'Başlat';
+            const buttonTranslations = {
+                'backToMenu()': tl('common.back'),
+                'kaydetAyarlar()': tl('common.save'),
+                'varsayilanAyarlariYukle()': tl('common.reset'),
+                'toggleStopwatch()': tl('common.start'),
+                'resetStopwatch()': tl('common.reset'),
+                'cekTarotKarti()': tl('common.drawCard'),
+                'hesaplaOrtalama()': tl('common.calculate'),
+                'olusturOgrenmePlani()': tl('common.createPlan'),
+                'kontrolEtUcgen()': tl('common.check'),
+                'olusturSifre()': tl('common.createPassword'),
+                'temizleYazi()': tl('common.clear'),
+                'startCountdownTimer()': tl('common.start'),
+                'resetCountdownTimer()': tl('common.reset'),
+                'convertBinaryDecimal(\'toBinary\')': tl('common.convert'),
+                'convertBinaryDecimal(\'toDecimal\')': tl('common.convert'),
+                'convertToRoman()': tl('common.convert'),
+                'calculateTip()': tl('common.calculate'),
+                'checkPasswordStrength()': tl('common.check'),
+                'calculateLoan()': tl('common.calculate'),
+                'resetWaterTracker()': tl('common.reset'),
+                'addHabit()': tl('common.add'),
+                'completeHabit()': tl('home.open'),
+                'requestNotificationPermission()': tl('extras.buttonAllow'),
+                'testNotification()': tl('extras.buttonTest'),
+                'formatJsonInput()': tl('extras.buttonFormat'),
+                'minifyJsonInput()': tl('extras.buttonMinify'),
+                'convertBaseNumber()': tl('common.convert'),
+                'generateTeams()': tl('extras.buttonCreateTeams'),
+                'speakText()': tl('extras.buttonSpeak'),
+                'stopSpeakingText()': tl('extras.buttonStop'),
+                'hesaplaBMI()': tl('common.calculate'),
+                'donusturSicaklik()': tl('common.convert'),
+                'olusturCarpimTablosu()': tl('common.generate'),
+                'olusturFibonacci()': tl('common.generate'),
+                'kontrolAsalSayi()': tl('common.check'),
+                'baslaTahminOyunu()': tl('common.start'),
+                'gosterSaka()': tl('common.show'),
+                'gosterAlintilar()': tl('common.show'),
+                'donusturParaBirimi()': tl('common.convert'),
+                'hesaplaFactorial()': tl('common.calculate'),
+                'uretRastgeleRenk()': tl('extras.buttonGenerate'),
+                'guncelleZamanDilimleri()': tl('common.refresh'),
+                'olusturQrKod()': tl('extras.buttonGenerate'),
+                'indirQrKod()': 'Download',
+                'togglePomodoro()': tl('pomodoro.start'),
+                'resetPomodoro()': tl('common.reset'),
+                'skipPomodoroPhase()': tl('pomodoro.skip'),
+                'aiMesajGonder()': tl('common.send'),
+                'temizleAiSohbet()': tl('common.clear'),
+                'ekleAiGorevi()': tl('common.add'),
+                'generateRandomNumber()': tl('extras.buttonGenerate'),
+                'addWaterGlass()': tl('extras.buttonAdd')
+            };
+            document.querySelectorAll('.btn-submit, .btn-back, .game-menu-btn, .option-btn').forEach((btn) => {
+                const onclick = (btn.getAttribute('onclick') || '').trim();
+                if (buttonTranslations[onclick]) {
+                    btn.innerText = buttonTranslations[onclick];
+                }
+            });
             const quickButtons = document.querySelectorAll('#aiYardimci .quick-actions button');
             tl('quick').forEach((text, index) => { if (quickButtons[index]) quickButtons[index].innerText = text; });
+            const quickHubTitle = document.querySelector('#mainMenu .quick-hub-head h3');
+            if (quickHubTitle) quickHubTitle.innerText = tl('home.quickHubTitle');
+            const accountManageBtn = document.querySelector('#mainMenu .account-strip button');
+            if (accountManageBtn) accountManageBtn.innerText = tl('home.accountManage');
+            const installAppBtn = document.getElementById('installAppBtn');
+            if (installAppBtn) installAppBtn.innerText = tl('home.installApp');
+            const shareAppBtn = Array.from(document.querySelectorAll('#mainMenu .quick-hub-actions .quick-hub-btn')).find(btn => (btn.textContent || '').includes('Uygulamayi Paylas') || (btn.textContent || '').includes('Share App'));
+            if (shareAppBtn) shareAppBtn.innerText = tl('home.shareApp');
+            const backupBtn = Array.from(document.querySelectorAll('#mainMenu .quick-hub-actions .quick-hub-btn')).find(btn => (btn.textContent || '').includes('Yedek Al') || (btn.textContent || '').includes('Backup'));
+            if (backupBtn) backupBtn.innerText = tl('home.backupData');
+            const restoreBtn = Array.from(document.querySelectorAll('#mainMenu .quick-hub-actions .quick-hub-btn')).find(btn => (btn.textContent || '').includes('Yedegi Geri Yukle') || (btn.textContent || '').includes('Restore Backup'));
+            if (restoreBtn) restoreBtn.innerText = tl('home.restoreData');
+            const clearDataBtn = Array.from(document.querySelectorAll('#mainMenu .quick-hub-actions .quick-hub-btn')).find(btn => (btn.textContent || '').includes('Tum Veriyi Temizle') || (btn.textContent || '').includes('Clear All Data'));
+            if (clearDataBtn) clearDataBtn.innerText = tl('home.clearData');
+            const installHint = document.getElementById('installHint');
+            if (installHint) installHint.innerText = tl('home.installHint');
+            const mainMenuExtrasTitle = document.querySelector('#mainMenu .content-header h2');
+            if (mainMenuExtrasTitle) mainMenuExtrasTitle.innerText = tl('home.extrasTitle');
+            const extraCards = document.querySelectorAll('#mainMenu .extra-card');
+            const extraCardTitles = [
+                tl('extras.rngTitle'), tl('extras.countdownTitle'), tl('extras.binaryTitle'), tl('extras.romanTitle'),
+                tl('extras.tipTitle'), tl('extras.urlTitle'), tl('extras.strengthTitle'), tl('extras.loanTitle'),
+                tl('extras.waterTitle'), tl('extras.habitTitle'), tl('extras.notifyTitle'), tl('extras.jsonTitle'),
+                tl('extras.baseTitle'), tl('extras.teamTitle'), tl('extras.ttsTitle')
+            ];
+            extraCards.forEach((card, index) => {
+                const title = card.querySelector('h3');
+                if (title && extraCardTitles[index]) title.innerText = extraCardTitles[index];
+            });
+            const extraInputs = [
+                ['#rngMin', tl('extras.min')], ['#rngMax', tl('extras.max')], ['#countdownSeconds', tl('extras.seconds')],
+                ['#binaryInput', tl('extras.binaryPlaceholder')], ['#romanInput', tl('extras.romanPlaceholder')], ['#tipAmount', tl('extras.tipAmount')],
+                ['#tipPercent', tl('extras.tipPercent')], ['#urlInput', tl('extras.urlPlaceholder')], ['#strengthInput', tl('extras.strengthPlaceholder')],
+                ['#loanAmount', tl('extras.loanAmount')], ['#loanRate', tl('extras.loanRate')], ['#loanMonths', tl('extras.loanMonths')],
+                ['#habitInput', tl('extras.habitPlaceholder')], ['#jsonInput', tl('extras.jsonPlaceholder')], ['#baseInput', tl('extras.basePlaceholder')],
+                ['#baseFrom', tl('extras.baseFrom')], ['#baseTo', tl('extras.baseTo')], ['#teamInput', tl('extras.teamPlaceholder')], ['#teamCount', tl('extras.teamCount')], ['#ttsInput', tl('extras.ttsPlaceholder')]
+            ];
+            extraInputs.forEach(([selector, text]) => {
+                const input = document.querySelector(selector);
+                if (input && text) input.placeholder = text;
+            });
+            const notifyHint = document.querySelector('#mainMenu .extra-card:nth-child(11) p');
+            if (notifyHint) notifyHint.innerText = tl('home.notifyHint');
             updatePomodoroDisplay();
             updateClockDisplay();
             renderHomeDashboard();
@@ -3405,18 +3807,19 @@
             const finalIds = merged.filter(id => buttonMap[id]).slice(0, 6);
 
             if (!finalIds.length) {
-                container.innerHTML = '<div class="quick-access-empty">Kullandikca burada favorilerin ve en cok acilan araclar cikacak.</div>';
+                container.innerHTML = `<div class="quick-access-empty">${tl('home.quickAccessEmpty')}</div>`;
                 return;
             }
 
             container.innerHTML = finalIds.map(id => {
                 const isFavorite = appMetaState.favorites.includes(id);
                 const count = appMetaState.usage[id] || 0;
+                const openText = appSettings.language === 'en' ? 'Open' : 'Aç';
                 return `
                     <div class="quick-access-item">
                         <span>${buttonMap[id]} (${count})</span>
                         <div>
-                            <button class="quick-open-btn" onclick="showContent('${id}')">Ac</button>
+                            <button class="quick-open-btn" onclick="showContent('${id}')">${openText}</button>
                             <button class="quick-fav-btn" onclick="toggleFavorite('${id}')">${isFavorite ? '★' : '☆'}</button>
                         </div>
                     </div>
@@ -3430,7 +3833,7 @@
                 return;
             }
             const online = navigator.onLine;
-            badge.innerText = online ? 'Cevrimici' : 'Cevrimdisi';
+            badge.innerText = online ? tl('home.connectionOnline') : tl('home.connectionOffline');
             badge.classList.toggle('offline', !online);
         }
 
@@ -3438,7 +3841,7 @@
             if (!appMetaState.deferredInstallPrompt) {
                 const hint = document.getElementById('installHint');
                 if (hint) {
-                    hint.innerText = 'Yukleme secenegi su an mevcut degil. Destekleyen bir tarayicida HTTPS uzerinden acmayi dene.';
+                    hint.innerText = appSettings.language === 'en' ? 'Install is not available right now. Try opening the app over HTTPS in a supported browser.' : 'Yükleme seçeneği şu an mevcut değil. Destekleyen bir tarayicide HTTPS üzerinden açmayı dene.';
                 }
                 return;
             }
@@ -3448,7 +3851,7 @@
                 if (choice && choice.outcome === 'accepted') {
                     const hint = document.getElementById('installHint');
                     if (hint) {
-                        hint.innerText = 'Uygulama yukleme istegi gonderildi. Ana ekrani kontrol et.';
+                        hint.innerText = appSettings.language === 'en' ? 'The app install request was sent. Check your home screen.' : 'Uygulama yükleme isteği gönderildi. Ana ekranı kontrol et.';
                     }
                 }
                 appMetaState.deferredInstallPrompt = null;
@@ -4445,16 +4848,18 @@
             }
 
             summary.innerHTML = `
-                <div class="summary-box"><strong>${appStats.game.total || 0}</strong><span>Toplam</span></div>
-                <div class="summary-box"><strong>${appStats.game.wins || 0}</strong><span>Galibiyet</span></div>
-                <div class="summary-box"><strong>${appStats.game.losses || 0}</strong><span>Mağlubiyet</span></div>
-                <div class="summary-box"><strong>${appStats.game.draws || 0}</strong><span>Berabere</span></div>
+                <div class="summary-box"><strong>${appStats.game.total || 0}</strong><span>${appSettings.language === 'en' ? 'Total' : 'Toplam'}</span></div>
+                <div class="summary-box"><strong>${appStats.game.wins || 0}</strong><span>${appSettings.language === 'en' ? 'Wins' : 'Galibiyet'}</span></div>
+                <div class="summary-box"><strong>${appStats.game.losses || 0}</strong><span>${appSettings.language === 'en' ? 'Losses' : 'Mağlubiyet'}</span></div>
+                <div class="summary-box"><strong>${appStats.game.draws || 0}</strong><span>${appSettings.language === 'en' ? 'Draws' : 'Berabere'}</span></div>
             `;
 
-            cardScore.innerHTML = `Kart Oyunu Özeti: <strong>${appStats.game.wins || 0}</strong> galibiyet, <strong>${appStats.game.losses || 0}</strong> mağlubiyet, <strong>${appStats.game.draws || 0}</strong> beraberlik`;
+            cardScore.innerHTML = appSettings.language === 'en'
+                ? `Card Game Summary: <strong>${appStats.game.wins || 0}</strong> wins, <strong>${appStats.game.losses || 0}</strong> losses, <strong>${appStats.game.draws || 0}</strong> draws`
+                : `Kart Oyunu Özeti: <strong>${appStats.game.wins || 0}</strong> galibiyet, <strong>${appStats.game.losses || 0}</strong> mağlubiyet, <strong>${appStats.game.draws || 0}</strong> beraberlik`;
             history.innerHTML = appStats.game.history.length
                 ? appStats.game.history.map(item => `<div class="history-item">${item}</div>`).join('')
-                : '<div class="history-item">Henüz oyun geçmişi yok.</div>';
+                : `<div class="history-item">${appSettings.language === 'en' ? 'No game history yet.' : 'Henüz oyun geçmişi yok.'}</div>`;
             renderHomeDashboard();
         }
 
@@ -4466,14 +4871,14 @@
             }
 
             summary.innerHTML = `
-                <div class="summary-box"><strong>${appStats.math.total || 0}</strong><span>İşlem</span></div>
-                <div class="summary-box"><strong>${appStats.math.guessBest ?? '-'}</strong><span>Tahmin Rekoru</span></div>
-                <div class="summary-box"><strong>${(appStats.math.history || []).length}</strong><span>Kayıt</span></div>
+                <div class="summary-box"><strong>${appStats.math.total || 0}</strong><span>${appSettings.language === 'en' ? 'Operations' : 'İşlem'}</span></div>
+                <div class="summary-box"><strong>${appStats.math.guessBest ?? '-'}</strong><span>${appSettings.language === 'en' ? 'Guess Record' : 'Tahmin Rekoru'}</span></div>
+                <div class="summary-box"><strong>${(appStats.math.history || []).length}</strong><span>${appSettings.language === 'en' ? 'Records' : 'Kayıt'}</span></div>
             `;
 
             history.innerHTML = appStats.math.history.length
                 ? appStats.math.history.map(item => `<div class="history-item">${item}</div>`).join('')
-                : '<div class="history-item">Henüz matematik geçmişi yok.</div>';
+                : `<div class="history-item">${appSettings.language === 'en' ? 'No math history yet.' : 'Henüz matematik geçmişi yok.'}</div>`;
             renderHomeDashboard();
         }
 
@@ -6119,4 +6524,5 @@
     </script>
 </body>
 </html>
+
 
