@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="manifest" href="assets/manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+  <title>Çoklu Amaçlı Uygulama</title>
+</head>
+<body>
+  <div class="page-transition" id="page-transition"><span>Yükleniyor</span></div>
+  <div class="container">
+    <header class="header">
+      <h1>Çoklu Amaçlı Uygulama</h1>
+      <p>35 in 1</p>
+      <a class="switch-app-btn" href="#" id="switch-app-btn">Uygulamalar</a>
+    </header>
+
+    <nav class="menu-grid" id="app-menu" aria-label="Uygulama Menüsü">
+      <!-- JS ile doldurulacak: her uygulama için bir buton -->
+    </nav>
+
+    <main id="app-container">
+      <!-- apps/*.html burada dinamik yüklenecek -->
+    </main>
+
+    <div class="back-to-menu">
+      <button class="btn-back" id="back-to-menu" style="display:none">Geri</button>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
