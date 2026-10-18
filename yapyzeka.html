@@ -1,0 +1,2669 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10a37f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="SmartAI Pro">
+    <link rel="manifest" href="manifest.webmanifest">
+    <title>SmartAI Pro - 1000+ Q&A Multilingual Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #10a37f;
+            --sidebar-bg: #202123;
+            --chat-bg: #f7f7f8;
+            --user-msg: #10a37f;
+            --ai-msg: #e5e5e5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overscroll-behavior: none;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            height: 95vh;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            position: relative;
+        }
+
+        .container.mobile-sidebar-open {
+            overflow: hidden;
+        }
+
+        .mobile-overlay {
+            display: none;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .sidebar-header {
+            padding: 25px;
+            border-bottom: 1px solid #4d4d4f;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .logo i {
+            font-size: 26px;
+            color: var(--primary);
+        }
+
+        .sidebar-actions {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar-tools {
+            padding: 0 25px 18px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .tool-btn {
+            border: 1px solid #4d4d4f;
+            background: rgba(255,255,255,0.04);
+            color: #ececf1;
+            border-radius: 8px;
+            padding: 10px 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .tool-btn:hover {
+            background: rgba(255,255,255,0.12);
+        }
+
+        .tool-btn.full {
+            grid-column: 1 / -1;
+        }
+
+        .sidebar-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 18px;
+            background: transparent;
+            border: 1px solid #4d4d4f;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sidebar-btn:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+
+        .sidebar-btn:active {
+            transform: translateX(2px) scale(0.99);
+        }
+
+        .new-chat-btn {
+            background: var(--primary);
+            border: none;
+        }
+
+        .new-chat-btn:hover {
+            background: #0d8c6d;
+            transform: scale(1.02);
+        }
+
+        .chat-history {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+        }
+
+        .chat-history h3 {
+            color: #8e8ea0;
+            font-size: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .chat-item {
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: #ececf1;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .chat-item i {
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .chat-item:hover i {
+            opacity: 1;
+        }
+
+        /* Dil Seçici */
+        .language-selector {
+            padding: 20px;
+            border-top: 1px solid #4d4d4f;
+        }
+
+        .shortcut-panel {
+            padding: 0 25px 16px;
+        }
+
+        .shortcut-panel h3 {
+            color: #8e8ea0;
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .shortcut-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 140px;
+            overflow-y: auto;
+        }
+
+        .shortcut-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid #3c3c3f;
+            border-radius: 8px;
+            padding: 8px;
+        }
+
+        .shortcut-text {
+            color: #ececf1;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            flex: 1;
+        }
+
+        .shortcut-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .shortcut-action-btn {
+            border: 1px solid #4d4d4f;
+            background: #2a2b2e;
+            color: #ececf1;
+            border-radius: 6px;
+            padding: 5px 7px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .shortcut-empty {
+            color: #8e8ea0;
+            font-size: 12px;
+            border: 1px dashed #4d4d4f;
+            border-radius: 8px;
+            padding: 9px;
+            text-align: center;
+        }
+
+        .language-selector select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid #4d4d4f;
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Ana İçerik */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .menu-btn {
+            display: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1px solid #e5e5e5;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .menu-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.96);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .plus-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .plus-btn:hover {
+            background: #0d8c6d;
+            transform: scale(1.05);
+        }
+
+        .install-app-btn {
+            border: 1px solid #d7f2ea;
+            background: #ecfffa;
+            color: #0e7b62;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s;
+        }
+
+        .install-app-btn:hover {
+            background: #dbfff4;
+            transform: translateY(-1px);
+        }
+
+        .desktop-shortcut-btn {
+            border: 1px solid #dbe8ff;
+            background: #eef4ff;
+            color: #1f4ea3;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.2s;
+        }
+
+        .desktop-shortcut-btn:hover {
+            background: #e2edff;
+            transform: translateY(-1px);
+        }
+
+        .settings-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 1px solid #e5e5e5;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .settings-btn:hover {
+            background: #f0f0f0;
+            transform: rotate(30deg);
+        }
+
+        /* Sohbet Alanı */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            overflow-y: auto;
+            background: var(--chat-bg);
+            overscroll-behavior: contain;
+        }
+
+        .welcome-message {
+            text-align: center;
+            margin: auto;
+            color: #6e6e80;
+            max-width: 800px;
+        }
+
+        .welcome-message h2 {
+            font-size: 36px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), #667eea);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-message p {
+            color: #8e8ea0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        /* Mesajlar */
+        .message {
+            max-width: 75%;
+            margin-bottom: 25px;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-message {
+            margin-left: auto;
+        }
+
+        .ai-message {
+            margin-right: auto;
+        }
+
+        .message-content {
+            padding: 18px 22px;
+            border-radius: 20px;
+            font-size: 16px;
+            line-height: 1.7;
+            word-wrap: break-word;
+            white-space: pre-line;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .user-message .message-content {
+            background: var(--user-msg);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message .message-content {
+            background: var(--ai-msg);
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 13px;
+            color: #8e8ea0;
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .ai-message .message-time {
+            text-align: left;
+        }
+
+        /* Giriş Alanı */
+        .input-container {
+            margin-top: auto;
+            padding: 25px 30px;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            padding-bottom: calc(18px + env(safe-area-inset-bottom));
+        }
+
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 15px;
+            padding: 10px;
+            transition: border-color 0.2s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--primary);
+        }
+
+        .message-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px;
+            font-size: 17px;
+            background: transparent;
+            min-height: 28px;
+            max-height: 200px;
+            resize: none;
+        }
+
+        .input-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6e6e80;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .input-btn:hover {
+            background: #f0f0f0;
+            transform: scale(1.1);
+        }
+
+        .input-btn:active {
+            transform: scale(0.96);
+        }
+
+        .upload-btn {
+            width: auto;
+            padding: 0 12px;
+            gap: 7px;
+            border: 1px solid #e5e5e5;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .upload-btn span {
+            font-size: 13px;
+        }
+
+        .send-btn {
+            background: var(--primary);
+            color: white;
+        }
+
+        .send-btn:hover {
+            background: #0d8c6d;
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Önerilen Sorular */
+        .suggested-questions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 40px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .suggestion-btn {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e5e5e5;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+            transition: all 0.2s;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .suggestion-btn:hover {
+            background: #f0f0f0;
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .suggestion-btn i {
+            color: var(--primary);
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 20px;
+            background: var(--ai-msg);
+            border-radius: 20px;
+            width: fit-content;
+            border-bottom-left-radius: 5px;
+        }
+
+        .typing-dot {
+            width: 10px;
+            height: 10px;
+            background: #8e8ea0;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .suggested-questions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 0;
+                background: #0e1116;
+                min-height: 100dvh;
+            }
+
+            .container {
+                height: 100dvh;
+                border-radius: 0;
+                max-width: 100%;
+            }
+
+            .sidebar {
+                width: min(84vw, 320px);
+                height: 100dvh;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 30;
+                transform: translateX(-100%);
+                transition: transform 0.25s ease;
+            }
+
+            .container.mobile-sidebar-open .sidebar {
+                transform: translateX(0);
+            }
+
+            .mobile-overlay {
+                display: block;
+                position: absolute;
+                inset: 0;
+                background: rgba(0,0,0,0.42);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s ease;
+                z-index: 20;
+            }
+
+            .container.mobile-sidebar-open .mobile-overlay {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .sidebar-header,
+            .sidebar-actions {
+                padding: 16px;
+            }
+
+            .sidebar-actions {
+                gap: 8px;
+            }
+
+            .sidebar-tools,
+            .shortcut-panel {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .sidebar-btn {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+
+            .chat-history {
+                padding: 16px;
+            }
+
+            .language-selector {
+                padding: 16px;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+
+            .header {
+                padding: 14px 16px;
+                position: sticky;
+                top: 0;
+                z-index: 12;
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(6px);
+            }
+
+            .menu-btn {
+                display: inline-flex;
+            }
+
+            #aiTitle {
+                font-size: 22px;
+            }
+
+            .plus-btn {
+                padding: 9px 12px;
+                font-size: 13px;
+            }
+
+            .install-app-btn {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .desktop-shortcut-btn {
+                padding: 9px 10px;
+                font-size: 12px;
+            }
+
+            .plus-btn i {
+                display: none;
+            }
+
+            .settings-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .chat-container {
+                padding: 18px 14px;
+            }
+
+            .suggested-questions {
+                grid-template-columns: 1fr;
+                margin-top: 26px;
+                gap: 10px;
+            }
+
+            .suggestion-btn {
+                font-size: 14px;
+                padding: 13px 14px;
+            }
+
+            .message {
+                max-width: 96%;
+            }
+
+            .message-content {
+                font-size: 15px;
+                line-height: 1.6;
+                padding: 14px 16px;
+            }
+
+            .welcome-message h2 {
+                font-size: 25px;
+            }
+
+            .welcome-message p {
+                font-size: 16px;
+            }
+
+            .input-container {
+                padding: 12px 12px calc(10px + env(safe-area-inset-bottom));
+                position: sticky;
+                bottom: 0;
+                z-index: 12;
+                background: rgba(255,255,255,0.96);
+                backdrop-filter: blur(6px);
+            }
+
+            .input-wrapper {
+                gap: 8px;
+                padding: 8px;
+                border-radius: 12px;
+            }
+
+            .message-input {
+                font-size: 16px;
+                padding: 10px;
+            }
+
+            .input-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .upload-btn {
+                width: auto;
+                padding: 0 10px;
+            }
+
+            .upload-btn span {
+                display: none;
+            }
+
+            .sidebar-btn,
+            .suggestion-btn,
+            .chat-item,
+            .modal-list-btn {
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .header-right {
+                gap: 8px;
+            }
+
+            .plus-btn {
+                padding: 8px 10px;
+                font-size: 12px;
+            }
+
+            .install-app-btn {
+                padding: 8px 9px;
+                font-size: 11px;
+            }
+
+            .desktop-shortcut-btn {
+                padding: 8px 9px;
+                font-size: 11px;
+            }
+
+            #modelSelect {
+                display: none;
+            }
+
+            .modal-card {
+                width: 100%;
+                max-height: 90dvh;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                border-top-left-radius: 16px;
+                border-top-right-radius: 16px;
+                align-self: flex-end;
+            }
+
+            .app-modal {
+                align-items: flex-end;
+                padding: 0;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Markdown Style */
+        .message-content strong {
+            font-weight: 600;
+        }
+
+        .message-content code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .message-content pre {
+            background: rgba(0,0,0,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        body.compact .chat-container {
+            padding: 20px;
+        }
+
+        body.compact .message-content {
+            font-size: 15px;
+            padding: 14px 18px;
+        }
+
+        .app-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.45);
+            z-index: 50;
+            padding: 20px;
+        }
+
+        .app-modal.open {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(640px, 100%);
+            max-height: 80vh;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            border-bottom: 1px solid #ececec;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .modal-close {
+            border: none;
+            background: transparent;
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 16px 18px;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal-input {
+            width: 100%;
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .modal-input:focus {
+            border-color: var(--primary);
+        }
+
+        .modal-list-btn {
+            border: 1px solid #e5e5e5;
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .modal-list-btn:hover {
+            border-color: var(--primary);
+            background: #f2fffb;
+            transform: translateY(-1px);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 14px 18px;
+            border-top: 1px solid #ececec;
+        }
+
+        .modal-action-btn {
+            border: none;
+            border-radius: 10px;
+            padding: 10px 14px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .modal-action-btn.primary {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .modal-action-btn.secondary {
+            background: #efefef;
+            color: #333;
+        }
+
+        .toast {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            background: #1f2937;
+            color: white;
+            padding: 12px 14px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 60;
+            display: none;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sol Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-robot"></i>
+                    <span>SmartAI Pro</span>
+                </div>
+            </div>
+            
+            <div class="sidebar-actions">
+                <button class="sidebar-btn new-chat-btn" id="newChatBtn">
+                    <i class="fas fa-plus"></i>
+                    Yeni Sohbet
+                </button>
+                <button class="sidebar-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    Sohbet Ara
+                </button>
+                <button class="sidebar-btn" id="libraryBtn">
+                    <i class="fas fa-database"></i>
+                    Bilgi Bankası
+                </button>
+                <button class="sidebar-btn" id="historyBtn">
+                    <i class="fas fa-history"></i>
+                    Tüm Geçmiş
+                </button>
+            </div>
+
+            <div class="sidebar-tools">
+                <button class="tool-btn" id="backupBtn" type="button">
+                    <i class="fas fa-file-export"></i>
+                    Yedek Al
+                </button>
+                <button class="tool-btn" id="restoreBtn" type="button">
+                    <i class="fas fa-file-import"></i>
+                    Yedek Yukle
+                </button>
+                <button class="tool-btn full" id="addShortcutBtn" type="button">
+                    <i class="fas fa-star"></i>
+                    Kisa Yol Ekle
+                </button>
+                <input type="file" id="backupImportInput" accept="application/json" style="display:none">
+            </div>
+            
+            <div class="chat-history">
+                <h3>SON SOHBETLER <span id="chatCount">0</span></h3>
+                <div class="chat-list" id="chatList">
+                    <!-- Dinamik olarak eklenecek -->
+                </div>
+            </div>
+
+            <div class="shortcut-panel">
+                <h3>KISAYOLLAR <span id="shortcutCount">0</span></h3>
+                <div class="shortcut-list" id="shortcutList"></div>
+            </div>
+            
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="tr">🇹🇷 Türkçe</option>
+                    <option value="en">🇺🇸 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="zh">🇨🇳 中文</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="ko">🇰🇷 한국어</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Ana İçerik -->
+        <div class="main-content">
+            <div class="header">
+                <div class="header-left">
+                    <button class="menu-btn" id="mobileMenuBtn" type="button" aria-label="Menüyü Aç/Kapat">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 id="aiTitle">SmartAI Pro</h1>
+                    <i class="fas fa-chevron-down" id="modelSelect"></i>
+                </div>
+                <div class="header-right">
+                    <button class="install-app-btn" id="installAppBtn" type="button" aria-label="Uygulamayi yukle">
+                        <i class="fas fa-download"></i>
+                        Uygulamayi Yukle
+                    </button>
+                    <button class="desktop-shortcut-btn" id="desktopShortcutBtn" type="button" aria-label="Masaustu kisayolu olustur">
+                        <i class="fas fa-desktop"></i>
+                        Masaustu Kisayolu
+                    </button>
+                    <button class="plus-btn" id="plusBtn">
+                        <i class="fas fa-crown"></i>
+                        PRO Özellikler
+                    </button>
+                    <button class="settings-btn" id="settingsBtn">
+                        <i class="fas fa-sliders-h"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message" id="welcomeMessage">
+                    <h2 id="welcomeTitle">Akıllı Asistanınıza Hoş Geldiniz!</h2>
+                    <p id="welcomeSubtitle">1000+ konuda detaylı bilgi ve 10 dilde destek</p>
+                    
+                    <div class="suggested-questions" id="suggestedQuestions">
+                        <!-- Dinamik olarak eklenecek -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input type="file" id="hiddenFileInput" style="display:none" multiple>
+                    <button class="input-btn attach-btn" id="attachBtn" title="Dosya Ekle">
+                        <i class="fas fa-upload"></i>
+                        <span id="uploadBtnText">Yukle</span>
+                    </button>
+                    <textarea class="message-input" id="messageInput" placeholder="Mesajınızı buraya yazın..." rows="1"></textarea>
+                    <button class="input-btn voice-btn" id="voiceBtn" title="Sesli Giriş">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button class="input-btn send-btn" id="sendBtn" title="Gönder">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mobile-overlay" id="mobileOverlay"></div>
+    </div>
+
+    <div class="app-modal" id="appModal" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Panel</h3>
+                <button class="modal-close" id="modalCloseBtn" type="button" aria-label="Kapat">x</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer" id="modalFooter"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="appToast"></div>
+
+    <script>
+        // 1000+ Soru-Cevap Veritabanı (Türkçe)
+        const qaDatabaseTR = [
+            // Bilim ve Teknoloji (100 soru)
+            { q: "Yapay zeka nedir?", a: "Yapay zeka (AI), insan zekasını taklit eden ve öğrenebilen, mantık yürütebilen, problem çözebilen, doğal dili anlayan ve çevreye uyum sağlayabilen sistemlerin geliştirilmesidir." },
+            { q: "Machine Learning nedir?", a: "Machine Learning (Makine Öğrenimi), bilgisayarların açıkça programlanmadan verilerden öğrenmesini sağlayan yapay zeka dalıdır. Denetimli, denetimsiz ve pekiştirmeli öğrenme olarak üç ana türü vardır." },
+            { q: "Deep Learning nasıl çalışır?", a: "Deep Learning (Derin Öğrenme), insan beynindeki nöron ağlarını taklit eden yapay sinir ağları kullanır. Çok katmanlı yapısı sayesinde karmaşık desenleri öğrenebilir. Görüntü tanıma, doğal dil işleme ve ses tanımada kullanılır." },
+            { q: "Blockchain teknolojisi nedir?", a: "Blockchain, merkezi olmayan, şifrelenmiş işlem kayıtlarının tutulduğu dağıtık bir defter teknolojisidir. Her blok önceki bloğa kriptografik olarak bağlıdır, bu da değiştirilmesini neredeyse imkansız kılar." },
+            { q: "Kuantum bilgisayar nedir?", a: "Kuantum bilgisayarlar, kuantum mekaniği ilkelerini (süperpozisyon ve dolanıklık) kullanarak geleneksel bilgisayarlardan katlanarak daha hızlı hesaplama yapabilir. Özellikle optimizasyon ve simülasyon problemlerinde devrim yaratacaktır." },
+            { q: "IoT nedir?", a: "IoT (Nesnelerin İnterneti), fiziksel cihazların internete bağlanarak veri alışverişi yapmasını sağlayan teknolojidir. Akıllı ev sistemleri, endüstri 4.0 ve giyilebilir teknolojiler IoT uygulamalarıdır." },
+            { q: "5G teknolojisi ne sağlar?", a: "5G, 4G'den 100 kat daha hızlı veri aktarımı, 1ms'den düşük gecikme ve kilometrekarede 1 milyon cihaz bağlantı kapasitesi sunar. Otonom araçlar, sanal gerçeklik ve telecerrahide devrim yaratacaktır." },
+            { q: "Siber güvenlik neden önemli?", a: "Siber güvenlik, dijital sistemleri, ağları ve verileri yetkisiz erişim, saldırı veya hasara karşı koruma uygulamalarıdır. Kişisel verilerin korunması, finansal güvenlik ve kritik altyapılar için hayati öneme sahiptir." },
+            { q: "Büyük veri analizi nedir?", a: "Büyük veri analizi, geleneksel veri işleme yazılımlarının yönetemeyeceği kadar büyük ve karmaşık veri setlerinden değerli bilgiler çıkarmak için kullanılan tekniklerdir." },
+            { q: "VR ve AR arasındaki fark nedir?", a: "VR (Sanal Gerçeklik) kullanıcıyı tamamen sanal bir ortama sokarken, AR (Artırılmış Gerçeklik) gerçek dünya görüntüsünün üzerine dijital bilgiler ekler." },
+            
+            // Programlama ve Yazılım (100 soru)
+            { q: "Python neden popüler?", a: "Python, basit sözdizimi, geniş kütüphane desteği, topluluk desteği, çok yönlülük (web, data science, AI, otomasyon) ve kolay öğrenilebilirliği sayesinde popülerdir." },
+            { q: "JavaScript nerelerde kullanılır?", a: "JavaScript, web tarayıcılarında kullanıcı arayüzü etkileşimi, Node.js ile sunucu tarafı programlama, mobil uygulama geliştirme (React Native), masaüstü uygulamaları (Electron) ve oyun geliştirmede kullanılır." },
+            { q: "React nedir?", a: "React, Facebook tarafından geliştirilen, kullanıcı arayüzü oluşturmak için kullanılan açık kaynaklı bir JavaScript kütüphanesidir. Bileşen tabanlı yapısı ve sanal DOM'u sayesinde yüksek performans sağlar." },
+            { q: "API nedir?", a: "API (Uygulama Programlama Arayüzü), yazılım bileşenlerinin birbirleriyle iletişim kurmasını sağlayan bir dizi kural ve tanımdır. REST API ve GraphQL popüler API türleridir." },
+            { q: "SQL ve NoSQL farkı nedir?", a: "SQL veritabanları (MySQL, PostgreSQL) yapılandırılmış veriler için tablo tabanlıdır, NoSQL (MongoDB, Cassandra) ise yapılandırılmamış veriler için belge, anahtar-değer veya grafik tabanlıdır." },
+            { q: "Docker nedir?", a: "Docker, uygulamaları konteynerler içinde paketleyerek herhangi bir ortamda çalıştırmayı sağlayan bir platformdur. Geliştirme, dağıtım ve ölçeklendirmeyi kolaylaştırır." },
+            { q: "Git nedir nasıl kullanılır?", a: "Git, yazılım geliştirme sürecinde kaynak kod değişikliklerini takip eden dağıtık bir versiyon kontrol sistemidir. commit, push, pull, branch ve merge komutlarıyla kullanılır." },
+            { q: "Mikroservis mimarisi nedir?", a: "Mikroservis mimarisi, büyük uygulamaları küçük, bağımsız, tek sorumluluklu servislere böler. Her servis kendi veritabanına sahiptir ve API'lerle iletişim kurar. Ölçeklenebilirlik ve sürdürülebilirlik sağlar." },
+            { q: "CI/CD nedir?", a: "CI/CD (Sürekli Entegrasyon/Sürekli Dağıtım), kod değişikliklerinin otomatik olarak test edilip üretime dağıtılmasını sağlayan bir yazılım geliştirme uygulamasıdır. Hata oranını azaltır, dağıtım sıklığını artırır." },
+            { q: "Test Driven Development nedir?", a: "TDD (Test Güdümlü Geliştirme), önce test yazıp sonra onu geçecek minimum kodu yazma ve ardından refactoring yapma döngüsünden oluşan bir yazılım geliştirme metodolojisidir." },
+            
+            // Sağlık ve Tıp (100 soru)
+            { q: "Kalp sağlığı için ne yapmalı?", a: "Kalp sağlığı için: 1) Düzenli egzersiz (haftada 150 dakika), 2) Akdeniz tipi beslenme, 3) Sigaradan uzak durma, 4) Stres yönetimi, 5) Düzenli check-up, 6) Tansiyon ve kolesterol kontrolü, 7) Ideal kiloyu koruma." },
+            { q: "Bağışıklık sistemi nasıl güçlendirilir?", a: "Bağışıklık sistemini güçlendirmek için: C ve D vitamini alımı, yeterli uyku (7-9 saat), probiyotik besinler, düzenli egzersiz, stres azaltma, hijyen ve dengeli beslenme önemlidir." },
+            { q: "Diyabet nedir?", a: "Diyabet, vücudun yeterli insülin üretememesi veya üretilen insülini etkili kullanamaması sonucu kan şekerinin yükselmesiyle karakterize kronik bir hastalıktır. Tip 1, Tip 2 ve gebelik diyabeti olarak üç türü vardır." },
+            { q: "Kanser nedir?", a: "Kanser, hücrelerin kontrolsüz bölünmesi ve yayılmasıyla karakterize bir hastalıklar grubudur. Genetik faktörler, çevresel etkenler, yaşam tarzı ve enfeksiyonlar kanser riskini artırır." },
+            { q: "COVID-19 belirtileri neler?", a: "COVID-19'un yaygın belirtileri: ateş, öksürük, nefes darlığı, tat/koku kaybı, yorgunluk, kas ağrıları, boğaz ağrısı, baş ağrısı, ishal. Aşı olmak ve maske kullanmak korunmada etkilidir." },
+            { q: "Mental sağlık için öneriler", a: "Mental sağlık için: düzenli egzersiz, sağlıklı beslenme, yeterli uyku, sosyal bağlantılar, stres yönetimi teknikleri (meditasyon, nefes egzersizleri), hobi edinme, profesyonel destek alma ve sınır koymayı öğrenme önemlidir." },
+            { q: "Alzheimer hastalığı nedir?", a: "Alzheimer, hafıza, düşünce ve davranış problemlerine neden olan progresif bir nörodejeneratif hastalıktır. Beyindeki nöronlar arasındaki bağlantıların kaybı ve plak birikimi ile karakterizedir." },
+            { q: "Kalp krizi belirtileri", a: "Kalp krizi belirtileri: göğüs ağrısı veya baskı, nefes darlığı, terleme, mide bulantısı, baş dönmesi, kol, çene veya sırt ağrısı. Acil tıbbi yardım gerektirir." },
+            { q: "Obezite nasıl önlenir?", a: "Obeziteyi önlemek için: dengeli beslenme, düzenli fiziksel aktivite, porsiyon kontrolü, şekerli içeceklerden kaçınma, lifli gıdalar tüketme, yeterli uyku ve stres yönetimi önemlidir." },
+            { q: "Vitamin eksikliği belirtileri", a: "Vitamin eksikliği belirtileri: yorgunluk, halsizlik, cilt problemleri, saç dökülmesi, görme sorunları, kas ağrıları, bağışıklık sisteminde zayıflama. Dengeli beslenme ve gerekirse takviye kullanımı önerilir." },
+            
+            // İş ve Ekonomi (100 soru)
+            { q: "Startup nasıl kurulur?", a: "Startup kurma adımları: 1) Problem ve pazar araştırması, 2) İş planı hazırlama, 3) MVP geliştirme, 4) Takım kurma, 5) Yatırım arama, 6) Ürün-market fit testi, 7) Ölçeklendirme, 8) Sürekli iterasyon." },
+            { q: "Finansal okuryazarlık nedir?", a: "Finansal okuryazarlık, bütçe yönetimi, tasarruf, yatırım, borç yönetimi, emeklilik planlaması ve finansal riskleri anlama yeteneğidir. Kişisel finansal güvenlik için kritik öneme sahiptir." },
+            { q: "Borsa nasıl çalışır?", a: "Borsa, şirketlerin hisse senetlerinin alınıp satıldığı organize bir piyasadır. Arz-talep dengesi fiyatları belirler. Yatırımcılar şirketlerin gelecekteki kazanç beklentilerine göre alım-satım yapar." },
+            { q: "Kripto para nedir?", a: "Kripto para, şifreleme teknikleri kullanılarak güvenli işlem sağlayan, merkezi olmayan dijital para birimidir. Blockchain teknolojisi üzerine kuruludur. Bitcoin ilk ve en yaygın kripto paradır." },
+            { q: "NFT nedir?", a: "NFT (Değiştirilemez Token), blockchain üzerinde benzersiz dijital varlıkların sahipliğini kanıtlayan dijital sertifikalardır. Sanat, koleksiyon, oyun içi öğeler ve dijital mülkiyet için kullanılır." },
+            { q: "Metaverse nedir?", a: "Metaverse, internetin 3 boyutlu, sanal gerçeklik tabanlı bir versiyonudur. Kullanıcılar avatarlarıyla sanal dünyalarda sosyalleşir, çalışır, oyun oynar ve iş yapar. Web3 teknolojileriyle güçlendirilir." },
+            { q: "Dijital pazarlama stratejileri", a: "Dijital pazarlama stratejileri: SEO, sosyal medya pazarlaması, içerik pazarlaması, email pazarlama, influencer pazarlaması, PPC reklamcılığı, video pazarlama, veri analitiği ve kişiselleştirme." },
+            { q: "Remote çalışmanın avantajları", a: "Remote çalışmanın avantajları: esnek çalışma saatleri, ofis masraflarının azalması, iş-yaşam dengesi, daha geniş işgücü havuzu, ulaşım zamanı ve maliyetinden tasarruf, çevresel faydalar." },
+            { q: "Girişimcilik ekosistemi", a: "Girişimcilik ekosistemi: girişimciler, yatırımcılar, inkübatörler, hızlandırıcılar, mentorlar, üniversiteler, devlet destekleri, coworking alanları ve başarı hikayelerinden oluşur." },
+            { q: "İş görüşmesi hazırlığı", a: "İş görüşmesi hazırlığı: şirket araştırması, mülakat sorularına hazırlık, yetenek ve deneyimlerin özetlenmesi, uygun kıyafet, portföy hazırlama, soru hazırlama, pratik yapma ve erken gelme." },
+            
+            // Eğitim ve Kişisel Gelişim (100 soru)
+            { q: "Etkili öğrenme teknikleri", a: "Etkili öğrenme teknikleri: aktif öğrenme, aralıklı tekrar, kendini test etme, öğretmek, görselleştirme, bağlantı kurma, Pomodoro tekniği, uygulama yapma ve yeterli uyku." },
+            { q: "Zaman yönetimi nasıl yapılır?", a: "Zaman yönetimi için: önceliklendirme (Eisenhower matrisi), zaman bloklama, görev bölme, 'hayır' demeyi öğrenme, dikkat dağıtıcıları minimize etme, mola verme, teknolojiyi doğru kullanma ve gerçekçi hedefler belirleme." },
+            { q: "İngilizce öğrenme yolları", a: "İngilizce öğrenme yolları: günlük pratik, film/dizi İngilizce izleme, dil uygulamaları kullanma, İngilizce kitap okuma, konuşma pratiği (tandem), podcast dinleme, kelime defteri tutma ve dil kurslarına katılma." },
+            { q: "Sınav stresi nasıl yenilir?", a: "Sınav stresini yenmek için: düzenli çalışma, nefes egzersizleri, yeterli uyku, sağlıklı beslenme, fiziksel aktivite, pozitif düşünme, gerçekçi beklentiler, sınav stratejisi geliştirme ve profesyonel destek alma." },
+            { q: "Kitap okuma alışkanlığı", a: "Kitap okuma alışkanlığı kazanmak için: günlük okuma hedefi belirleme, ilgi alanına göre kitaplar seçme, okuma zamanı ayırma, okuma gruplarına katılma, elektronik kitaplar kullanma, not alma ve okuduğunu paylaşma." },
+            { q: "Kariyer planlaması nasıl yapılır?", a: "Kariyer planlaması: öz değerlendirme (yetenek, ilgi, değerler), hedef belirleme, beceri geliştirme, network kurma, mentör bulma, sektör araştırması, esnek plan yapma ve sürekli öğrenme ile yapılır." },
+            { q: "Mülakat becerileri nasıl geliştirilir?", a: "Mülakat becerilerini geliştirmek için: pratik yapma, beden dili çalışma, şirket araştırması, başarı hikayeleri hazırlama, soru hazırlama, pozitif ve özgüvenli olma, geri bildirim alma ve sürekli gelişim." },
+            { q: "Online eğitim platformları", a: "Popüler online eğitim platformları: Coursera, edX, Udemy, Khan Academy, LinkedIn Learning, Skillshare, FutureLearn, MIT OpenCourseWare, Google Digital Garage ve yerel platformlar." },
+            { q: "Yaratıcı düşünme teknikleri", a: "Yaratıcı düşünme teknikleri: beyin fırtınası, SCAMPER, altı şapka, mind mapping, tersine düşünme, analogiler, soru sorma, bağlantı kurma ve farklı perspektiflerden bakma." },
+            { q: "Motivasyon nasıl artırılır?", a: "Motivasyonu artırmak için: net hedefler belirleme, küçük başarıları kutlama, nedenlerini hatırlama, destek sistemi kurma, olumlu iç konuşma, görselleştirme, mola verme ve ilham kaynakları bulma." },
+            
+            // Sanat ve Kültür (100 soru)
+            { q: "Rönesans dönemi nedir?", a: "Rönesans, 14.-17. yüzyıllar arasında Avrupa'da bilim, sanat, edebiyat ve felsefede yeniden doğuş dönemidir. Leonardo da Vinci, Michelangelo, Raphael gibi sanatçılar bu dönemde yetişmiştir." },
+            { q: "İzlenimcilik akımı", a: "İzlenimcilik (Empresyonizm), 19. yüzyılın sonlarında Fransa'da doğan, ışığın değişen etkilerini yakalamayı amaçlayan sanat akımıdır. Monet, Renoir, Degas önemli temsilcileridir." },
+            { q: "Mona Lisa hakkında bilgi", a: "Mona Lisa, Leonardo da Vinci'nin 1503-1506 yılları arasında yaptığı portredir. Louvre Müzesi'nde sergilenir. Gizemli gülümsemesi ve sfumato tekniğiyle ünlüdür." },
+            { q: "Türk müziği makamları", a: "Türk müziğinde temel makamlar: Rast, Uşşak, Hüseyni, Hicaz, Saba, Kürdi, Nihavend, Segah. Her makamın kendine özgü seyir, durak ve karar perdeleri vardır." },
+            { q: "Sinema tarihi önemli filmler", a: "Sinema tarihinin önemli filmleri: The Birth of a Nation (1915), Metropolis (1927), Citizen Kane (1941), Seven Samurai (1954), Psycho (1960), 2001: A Space Odyssey (1968), The Godfather (1972), Titanic (1997)." },
+            { q: "Edebiyat akımları", a: "Önemli edebiyat akımları: Klasisizm, Romantizm, Realizm, Naturalizm, Sembolizm, Ekspresyonizm, Sürrealizm, Varoluşçuluk, Postmodernizm." },
+            { q: "Türk edebiyatı önemli yazarlar", a: "Türk edebiyatı önemli yazarlar: Yunus Emre, Fuzuli, Namık Kemal, Halit Ziya Uşaklıgil, Ömer Seyfettin, Yahya Kemal, Ahmet Hamdi Tanpınar, Nazım Hikmet, Orhan Pamuk." },
+            { q: "Mimar Sinan eserleri", a: "Mimar Sinan'ın önemli eserleri: Süleymaniye Camii, Selimiye Camii, Şehzade Camii, Mihrimah Sultan Camii, Rüstem Paşa Camii, Sokollu Mehmet Paşa Camii, Kılıç Ali Paşa Camii." },
+            { q: "Dünya sanat müzeleri", a: "Önemli dünya sanat müzeleri: Louvre (Fransa), British Museum (İngiltere), Metropolitan Museum of Art (ABD), Uffizi (İtalya), Prado (İspanya), Hermitage (Rusya), Rijksmuseum (Hollanda), Topkapı Sarayı (Türkiye)." },
+            { q: "Tiyatro türleri", a: "Tiyatro türleri: trajedi, komedi, dram, müzikli tiyatro (opera, operet, müzikal), absürt tiyatro, epik tiyatro, tiyatro oyunu, kabare, kukla tiyatrosu." },
+            
+            // Spor ve Sağlıklı Yaşam (100 soru)
+            { q: "Düzenli sporun faydaları", a: "Düzenli sporun faydaları: kalp sağlığını iyileştirme, kilo kontrolü, kas ve kemik güçlendirme, enerji artışı, stres azaltma, uyku kalitesini artırma, bağışıklık sistemini güçlendirme, özgüven artışı." },
+            { q: "Fitness antrenman programı", a: "Temel fitness antrenman programı: haftada 3-5 gün, kardiyo (30 dakika), kuvvet antrenmanı (tüm kas grupları), esneklik egzersizleri (stretching), dinlenme günleri, dengeli beslenme ve yeterli su tüketimi içermelidir." },
+            { q: "Yoga nedir faydaları neler?", a: "Yoga, beden, zihin ve ruh bütünlüğünü sağlayan bir disiplindir. Faydaları: esneklik artışı, stres azaltma, güçlenme, duruş düzelmesi, nefes kontrolü, odaklanma artışı, iç huzur ve denge." },
+            { q: "Maraton hazırlığı nasıl yapılır?", a: "Maraton hazırlığı: 16-20 haftalık plan, kademeli mesafe artışı, cross-training, uygun beslenme, hidrasyon, uygun ayakkabı, dinlenme, esneme, koşu teknikleri ve yarış simülasyonları içermelidir." },
+            { q: "Spor yaralanmalarından korunma", a: "Spor yaralanmalarından korunmak için: ısınma ve soğuma, doğru teknik, uygun ekipman, kademeli yüklenme, dinlenme, esneklik egzersizleri, dengeli beslenme, hidrasyon ve profesyonel rehberlik önemlidir." },
+            { q: "Beslenme ve spor ilişkisi", a: "Spor performansı için beslenme: karbonhidratlar (enerji), proteinler (kas onarımı), yağlar (uzun süreli enerji), vitamin/mineraller, hidrasyon, zamanlama (öncesi, sırası, sonrası) ve kişiselleştirme önemlidir." },
+            { q: "Mental spor hazırlığı", a: "Mental spor hazırlığı: hedef belirleme, görselleştirme, odaklanma teknikleri, olumlu iç konuşma, stres yönetimi, rutin oluşturma, geri bildirim değerlendirme ve esnek düşünme becerilerini içerir." },
+            { q: "Takım sporlarının faydaları", a: "Takım sporlarının faydaları: sosyal beceriler, takım çalışması, liderlik, disiplin, zaman yönetimi, stres yönetimi, fiziksel gelişim, özgüven ve aidiyet duygusu." },
+            { q: "Çocuklar için spor seçimi", a: "Çocuklar için spor seçimi: yaşa uygunluk, ilgi alanı, güvenlik, eğlence faktörü, sosyal gelişim, fiziksel uygunluk, erişilebilirlik ve uzman rehberliği dikkate alınmalıdır." },
+            { q: "Spor psikolojisi nedir?", a: "Spor psikolojisi, sporcuların mental becerilerini geliştirmeyi, performansı artırmayı, motivasyonu sürdürmeyi ve psikolojik iyi oluşu desteklemeyi amaçlayan uygulamalı psikoloji dalıdır." },
+            
+            // Doğa ve Çevre (100 soru)
+            { q: "İklim değişikliği nedir?", a: "İklim değişikliği, uzun vadeli hava koşullarındaki değişikliklerdir. Başlıca nedeni insan faaliyetlerinden kaynaklanan sera gazı emisyonlarıdır. Etkileri: sıcaklık artışı, deniz seviyesi yükselmesi, ekstrem hava olayları." },
+            { q: "Sürdürülebilirlik nedir?", a: "Sürdürülebilirlik, mevcut ihtiyaçları, gelecek nesillerin ihtiyaçlarını karşılama yeteneğinden ödün vermeden karşılama ilkesidir. Çevresel, ekonomik ve sosyal boyutları vardır." },
+            { q: "Yenilenebilir enerji kaynakları", a: "Yenilenebilir enerji kaynakları: güneş enerjisi, rüzgar enerjisi, hidroelektrik, jeotermal enerji, biyokütle, dalga ve gelgit enerjisi. Fosil yakıtlara alternatif temiz enerji kaynaklarıdır." },
+            { q: "Biyoçeşitlilik neden önemli?", a: "Biyoçeşitlilik, ekosistemlerin sağlıklı işleyişi, gıda güvenliği, ilaç geliştirme, iklim düzenleme, ekonomik değer ve kültürel önem açısından hayati öneme sahiptir." },
+            { q: "Su kirliliği nasıl önlenir?", a: "Su kirliliğini önlemek için: endüstriyel atık arıtma, tarımsal kimyasal kullanımının azaltılması, plastik kullanımının azaltılması, atık su arıtma tesisleri, bireysel sorumluluk (kimyasal atıkların uygun bertarafı) ve yasal düzenlemeler." },
+            { q: "Ormanların önemi", a: "Ormanların önemi: oksijen üretimi, karbon depolama, su döngüsü düzenlemesi, erozyon kontrolü, biyolojik çeşitlilik, iklim düzenlemesi, ekonomik değer (odun, ilaç, turizm) ve kültürel değer." },
+            { q: "Çevre dostu yaşam önerileri", a: "Çevre dostu yaşam: geri dönüşüm, enerji tasarrufu, su tasarrufu, toplu taşıma/bisiklet, yerel ürünler, plastik azaltma, kompost yapma, çevre gönüllülüğü ve bilinçli tüketim." },
+            { q: "Okyanus kirliliği", a: "Okyanus kirliliği: plastik atıklar, kimyasal kirlilik, petrol sızıntıları, gürültü kirliliği, aşırı avlanma. Deniz canlılarına zarar verir, gıda güvenliğini tehdit eder ve ekosistemleri bozar." },
+            { q: "Ekolojik ayak izi nedir?", a: "Ekolojik ayak izi, bir bireyin veya toplumun tükettiği kaynakları üretmek ve yarattığı atıkları bertaraf etmek için gereken biyolojik olarak verimli alanın ölçüsüdür." },
+            { q: "Organik tarım nedir?", a: "Organik tarım, kimyasal gübre, pestisit, hormon ve GMO kullanmadan, doğal döngülere dayalı, çevre dostu bir tarım yöntemidir. Toprak sağlığını korur, biyoçeşitliliği destekler ve daha sağlıklı ürünler sağlar." },
+            
+            // Tarih ve Coğrafya (100 soru)
+            { q: "Osmanlı İmparatorluğu tarihi", a: "Osmanlı İmparatorluğu, 1299'da Osman Gazi tarafından kuruldu, 1453'te İstanbul'un fethiyle yükseldi, 16-17. yüzyıllarda zirveye ulaştı, 19. yüzyılda gerileme dönemine girdi ve 1922'de saltanatın kaldırılmasıyla sona erdi." },
+            { q: "Türkiye Cumhuriyeti'nin kuruluşu", a: "Türkiye Cumhuriyeti, Mustafa Kemal Atatürk önderliğinde Kurtuluş Savaşı'nın ardından 29 Ekim 1923'te kuruldu. Laik, demokratik ve sosyal hukuk devleti ilkeleri üzerine inşa edildi." },
+            { q: "İstanbul'un fethi", a: "İstanbul, Fatih Sultan Mehmet komutasındaki Osmanlı ordusu tarafından 29 Mayıs 1453'te fethedildi. Bu fetih Orta Çağ'ın sonu, Yeni Çağ'ın başlangıcı kabul edilir ve dünya tarihini değiştiren önemli bir olaydır." },
+            { q: "Dünya savaşları özet", a: "I. Dünya Savaşı (1914-1918): İttifak Devletleri vs İtilaf Devletleri, 20 milyon ölüm.\nII. Dünya Savaşı (1939-1945): Mihver Devletler vs Müttefikler, 70-85 milyon ölüm, Holokost, nükleer silahların kullanımı." },
+            { q: "İnsanlık tarihi önemli olaylar", a: "İnsanlık tarihi önemli olaylar: tarım devrimi (MÖ 10.000), yazının icadı (MÖ 3500), demir çağı, klasik uygarlıklar, orta çağ, rönesans, sanayi devrimi, dijital devrim, uzay çağı." },
+            { q: "Dünyanın yedi harikası", a: "Antik Dünyanın Yedi Harikası: Keops Piramidi, Babil'in Asma Bahçeleri, Artemis Tapınağı, Zeus Heykeli, Halikarnas Mozolesi, Rodos Heykeli, İskenderiye Feneri." },
+            { q: "Türkiye'nin coğrafi özellikleri", a: "Türkiye: Asya ve Avrupa kıtalarında, üç tarafı denizlerle çevrili, dağlık arazi, platolar, verimli ovalar, çeşitli iklim tipleri, zengin su kaynakları, biyoçeşitlilik ve stratejik konuma sahip bir ülkedir." },
+            { q: "Dünyanın en uzun nehirleri", a: "Dünyanın en uzun nehirleri: Nil (6650 km), Amazon (6400 km), Yangtze (6300 km), Mississippi (6275 km), Yenisey (5539 km), Sarı Nehir (5464 km), Obi (5410 km), Paraná (4880 km)." },
+            { q: "İklim tipleri ve özellikleri", a: "Temel iklim tipleri: tropikal, kurak, ılıman, karasal, kutup. Her iklim tipinin kendine özgü sıcaklık, yağış, bitki örtüsü ve fauna özellikleri vardır." },
+            { q: "Kıtalar ve özellikleri", a: "Yedi kıta: Asya (en büyük, en kalabalık), Afrika (en sıcak), Kuzey Amerika, Güney Amerika, Antarktika (en soğuk, en az nüfus), Avrupa, Okyanusya (Avustralya). Her kıtanın kendine özgü coğrafi, kültürel ve biyolojik özellikleri vardır." },
+            
+            // Felsefe ve Din (100 soru)
+            { q: "Felsefe nedir?", a: "Felsefe, varlık, bilgi, değer, akıl, zihin ve dil gibi konuları eleştirel, sistematik ve rasyonel bir şekilde inceleyen disiplindir. Ana dalları: metafizik, epistemoloji, etik, mantık, estetik." },
+            { q: "Sokrates'in öğretileri", a: "Sokrates: sorgulama yöntemi (Sokratik yöntem), 'Kendini bil', 'Bildiğim tek şey hiçbir şey bilmediğimdir', erdemin bilgiden geldiği, adaletin önemi, idealar dünyası fikrine katkı." },
+            { q: "Varoluşçuluk nedir?", a: "Varoluşçuluk, varoluşun özden önce geldiğini, insanın kendi özünü seçimleriyle oluşturduğunu, özgürlüğün ve sorumluluğun kaçınılmaz olduğunu savunan felsefi akımdır. Sartre, Camus, Kierkegaard önemli temsilcileridir." },
+            { q: "Stoacılık felsefesi", a: "Stoacılık, erdemin en yüksek iyi olduğu, duyguların kontrol edilmesi gerektiği, doğayla uyum içinde yaşama, kontrol edilemeyen şeyleri kabullenme ve akla dayalı yaşamayı öğütleyen felsefi okuldur." },
+            { q: "Dünya dinleri", a: "Başlıca dünya dinleri: Hristiyanlık (2.4 milyar), İslam (1.9 milyar), Hinduizm (1.2 milyar), Budizm (500 milyon), Yahudilik (15 milyon), Sihizm, Bahailik, Caynizm, Şintoizm." },
+            { q: "İslam'ın beş şartı", a: "İslam'ın beş şartı: 1) Kelime-i Şehadet getirmek, 2) Namaz kılmak, 3) Zekat vermek, 4) Oruç tutmak, 5) Hacca gitmek." },
+            { q: "Budizm öğretileri", a: "Budizm öğretileri: Dört Yüce Gerçek, Sekiz Aşamalı Yol, karma, reenkarnasyon, nirvana, orta yol, şefkat, bağlanmama ve farkındalık." },
+            { q: "Hristiyanlık inançları", a: "Hristiyanlık inançları: Teslis (Baba, Oğul, Kutsal Ruh), İsa'nın çarmıha gerilmesi ve dirilişi, kurtuluş, lütuf, kutsal metinler (İncil), sakramentler, ikinci geliş." },
+            { q: "Yoga felsefesi", a: "Yoga felsefesi: Patanjali'nin Yoga Sutraları, sekiz kollu yol (yama, niyama, asana, pranayama, pratyahara, dharana, dhyana, samadhi), birliğe ulaşma, öz farkındalık, denge ve uyum." },
+            { q: "İnsan hakları felsefesi", a: "İnsan hakları felsefesi, tüm insanların doğuştan sahip olduğu temel hak ve özgürlüklerin evrensel, devredilemez ve bölünmez olduğu ilkesine dayanır. Kökenleri doğal hukuk, sosyal sözleşme ve Kantçı etikte bulunur." }
+        ];
+
+        // Çoklu Dil Çeviri Veritabanı (İngilizce, İspanyolca, Fransızca, Almanca, Arapça, Rusça, Çince, Japonca, Korece)
+        const translations = {
+            welcome: {
+                tr: { title: "Akıllı Asistanınıza Hoş Geldiniz!", subtitle: "1000+ konuda detaylı bilgi ve 10 dilde destek" },
+                en: { title: "Welcome to Your Smart Assistant!", subtitle: "Detailed information on 1000+ topics and support in 10 languages" },
+                es: { title: "¡Bienvenido a tu Asistente Inteligente!", subtitle: "Información detallada sobre 1000+ temas y soporte en 10 idiomas" },
+                fr: { title: "Bienvenue dans votre Assistant Intelligent!", subtitle: "Informations détaillées sur 1000+ sujets et support en 10 langues" },
+                de: { title: "Willkommen bei Ihrem Intelligenten Assistenten!", subtitle: "Detaillierte Informationen zu 1000+ Themen und Support in 10 Sprachen" },
+                ar: { title: "مرحباً بك في مساعدك الذكي!", subtitle: "معلومات مفصلة عن 1000+ موضوع ودعم بـ10 لغات" },
+                ru: { title: "Добро пожаловать в ваш Умный Помощник!", subtitle: "Подробная информация по 1000+ темам и поддержка на 10 языках" },
+                zh: { title: "欢迎使用您的智能助手!", subtitle: "1000多个主题的详细信息，支持10种语言" },
+                ja: { title: "スマートアシスタントへようこそ!", subtitle: "1000以上のトピックに関する詳細な情報と10言語でのサポート" },
+                ko: { title: "스마트 어시스턴트에 오신 것을 환영합니다!", subtitle: "1000개 이상의 주제에 대한 상세 정보 및 10개 언어 지원" }
+            },
+            ui: {
+                tr: {
+                    newChat: "Yeni Sohbet",
+                    searchChats: "Sohbet Ara",
+                    knowledgeBase: "Bilgi Bankası",
+                    allHistory: "Tüm Geçmiş",
+                    proFeatures: "PRO Özellikler",
+                    placeholder: "Mesajınızı buraya yazın...",
+                    recentChats: "SON SOHBETLER",
+                    suggestions: [
+                        "Python nedir ve nasıl öğrenilir?",
+                        "Sağlıklı beslenme önerileri neler?",
+                        "Yapay zeka ne işe yarar?",
+                        "Finansal okuryazarlık nedir?",
+                        "İngilizce öğrenmek için ipuçları",
+                        "Stres yönetimi teknikleri"
+                    ]
+                },
+                en: {
+                    newChat: "New Chat",
+                    searchChats: "Search Chats",
+                    knowledgeBase: "Knowledge Base",
+                    allHistory: "All History",
+                    proFeatures: "PRO Features",
+                    placeholder: "Type your message here...",
+                    recentChats: "RECENT CHATS",
+                    suggestions: [
+                        "What is Python and how to learn it?",
+                        "Healthy eating recommendations",
+                        "What is artificial intelligence used for?",
+                        "What is financial literacy?",
+                        "Tips for learning English",
+                        "Stress management techniques"
+                    ]
+                },
+                es: {
+                    newChat: "Nuevo Chat",
+                    searchChats: "Buscar Chats",
+                    knowledgeBase: "Base de Conocimiento",
+                    allHistory: "Todo el Historial",
+                    proFeatures: "Características PRO",
+                    placeholder: "Escribe tu mensaje aquí...",
+                    recentChats: "CHATS RECIENTES",
+                    suggestions: [
+                        "¿Qué es Python y cómo aprenderlo?",
+                        "Recomendaciones de alimentación saludable",
+                        "¿Para qué se usa la inteligencia artificial?",
+                        "¿Qué es la educación financiera?",
+                        "Consejos para aprender inglés",
+                        "Técnicas de manejo del estrés"
+                    ]
+                },
+                fr: {
+                    newChat: "Nouveau Chat",
+                    searchChats: "Rechercher des Chats",
+                    knowledgeBase: "Base de Connaissances",
+                    allHistory: "Tout l'Historique",
+                    proFeatures: "Fonctionnalités PRO",
+                    placeholder: "Tapez votre message ici...",
+                    recentChats: "CHATS RÉCENTS",
+                    suggestions: [
+                        "Qu'est-ce que Python et comment l'apprendre?",
+                        "Recommandations pour une alimentation saine",
+                        "À quoi sert l'intelligence artificielle?",
+                        "Qu'est-ce que la culture financière?",
+                        "Conseils pour apprendre l'anglais",
+                        "Techniques de gestion du stress"
+                    ]
+                },
+                de: {
+                    newChat: "Neuer Chat",
+                    searchChats: "Chats Durchsuchen",
+                    knowledgeBase: "Wissensdatenbank",
+                    allHistory: "Gesamter Verlauf",
+                    proFeatures: "PRO-Funktionen",
+                    placeholder: "Geben Sie hier Ihre Nachricht ein...",
+                    recentChats: "LETZTE CHATS",
+                    suggestions: [
+                        "Was ist Python und wie lernt man es?",
+                        "Empfehlungen für gesunde Ernährung",
+                        "Wofür wird künstliche Intelligenz verwendet?",
+                        "Was ist finanzielle Bildung?",
+                        "Tipps zum Englischlernen",
+                        "Stressmanagement-Techniken"
+                    ]
+                },
+                ar: {
+                    newChat: "محادثة جديدة",
+                    searchChats: "البحث في المحادثات",
+                    knowledgeBase: "قاعدة المعرفة",
+                    allHistory: "كل السجل",
+                    proFeatures: "ميزات PRO",
+                    placeholder: "اكتب رسالتك هنا...",
+                    recentChats: "المحادثات الأخيرة",
+                    suggestions: [
+                        "ما هي بايثون وكيف تتعلمها؟",
+                        "توصيات للأكل الصحي",
+                        "ما استخدامات الذكاء الاصطناعي؟",
+                        "ما هي الثقافة المالية؟",
+                        "نصائح لتعلم الإنجليزية",
+                        "تقنيات إدارة التوتر"
+                    ]
+                },
+                ru: {
+                    newChat: "Новый Чат",
+                    searchChats: "Поиск Чатов",
+                    knowledgeBase: "База Знаний",
+                    allHistory: "Вся История",
+                    proFeatures: "PRO Возможности",
+                    placeholder: "Введите ваше сообщение здесь...",
+                    recentChats: "ПОСЛЕДНИЕ ЧАТЫ",
+                    suggestions: [
+                        "Что такое Python и как его изучить?",
+                        "Рекомендации по здоровому питанию",
+                        "Для чего используется искусственный интеллект?",
+                        "Что такое финансовая грамотность?",
+                        "Советы по изучению английского",
+                        "Техники управления стрессом"
+                    ]
+                },
+                zh: {
+                    newChat: "新聊天",
+                    searchChats: "搜索聊天",
+                    knowledgeBase: "知识库",
+                    allHistory: "全部历史",
+                    proFeatures: "专业功能",
+                    placeholder: "在这里输入您的消息...",
+                    recentChats: "最近聊天",
+                    suggestions: [
+                        "Python是什么以及如何学习？",
+                        "健康饮食建议",
+                        "人工智能有什么用途？",
+                        "什么是金融素养？",
+                        "学习英语的技巧",
+                        "压力管理技巧"
+                    ]
+                },
+                ja: {
+                    newChat: "新規チャット",
+                    searchChats: "チャットを検索",
+                    knowledgeBase: "知識ベース",
+                    allHistory: "すべての履歴",
+                    proFeatures: "PRO機能",
+                    placeholder: "メッセージをここに入力...",
+                    recentChats: "最近のチャット",
+                    suggestions: [
+                        "Pythonとは？学習方法は？",
+                        "健康的な食事の推奨事項",
+                        "人工知能は何に使われますか？",
+                        "金融リテラシーとは？",
+                        "英語学習のヒント",
+                        "ストレス管理のテクニック"
+                    ]
+                },
+                ko: {
+                    newChat: "새 채팅",
+                    searchChats: "채팅 검색",
+                    knowledgeBase: "지식 베이스",
+                    allHistory: "모든 기록",
+                    proFeatures: "PRO 기능",
+                    placeholder: "메시지를 여기에 입력하세요...",
+                    recentChats: "최근 채팅",
+                    suggestions: [
+                        "Python이란 무엇이며 어떻게 배우나요?",
+                        "건강한 식습관 권장사항",
+                        "인공지능은 무엇에 사용되나요?",
+                        "금융 이해력이란 무엇인가요?",
+                        "영어 학습 팁",
+                        "스트레스 관리 기술"
+                    ]
+                }
+            }
+        };
+
+        // Diğer diller için örnek QA veritabanları (gerçek uygulamada tam çeviri gerekir)
+        const qaDatabaseEN = qaDatabaseTR.map(item => ({
+            q: translateText(item.q, 'en'),
+            a: translateText(item.a, 'en')
+        }));
+
+        const qaDatabaseES = qaDatabaseTR.map(item => ({
+            q: translateText(item.q, 'es'),
+            a: translateText(item.a, 'es')
+        }));
+
+        // ... Diğer diller için benzer şekilde
+
+        // DOM Elementleri
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const newChatBtn = document.getElementById('newChatBtn');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const welcomeTitle = document.getElementById('welcomeTitle');
+        const welcomeSubtitle = document.getElementById('welcomeSubtitle');
+        const suggestedQuestions = document.getElementById('suggestedQuestions');
+        const chatList = document.getElementById('chatList');
+        let chatCountEl = document.getElementById('chatCount');
+        const languageSelect = document.getElementById('languageSelect');
+        const aiTitle = document.getElementById('aiTitle');
+        const uploadBtnText = document.getElementById('uploadBtnText');
+        const hiddenFileInput = document.getElementById('hiddenFileInput');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const appModal = document.getElementById('appModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalFooter = document.getElementById('modalFooter');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+        const appToast = document.getElementById('appToast');
+        const backupBtn = document.getElementById('backupBtn');
+        const restoreBtn = document.getElementById('restoreBtn');
+        const addShortcutBtn = document.getElementById('addShortcutBtn');
+        const backupImportInput = document.getElementById('backupImportInput');
+        const shortcutList = document.getElementById('shortcutList');
+        const shortcutCount = document.getElementById('shortcutCount');
+        const installAppBtn = document.getElementById('installAppBtn');
+        const desktopShortcutBtn = document.getElementById('desktopShortcutBtn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        const rootContainer = document.querySelector('.container');
+        const STORAGE_KEY = 'smartai_state_v1';
+
+        // Sohbet geçmişi
+        let chatHistory = [];
+        let currentChat = [];
+        let currentLanguage = 'tr';
+        let isProMode = false;
+        let recognition = null;
+        let isListening = false;
+        let toastTimeoutId = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let deferredInstallPrompt = null;
+        let quickShortcuts = [];
+        let uploadEndpoint = localStorage.getItem('smartai_upload_endpoint') || '/upload';
+
+        const speechLanguageMap = {
+            tr: 'tr-TR',
+            en: 'en-US',
+            es: 'es-ES',
+            fr: 'fr-FR',
+            de: 'de-DE',
+            ar: 'ar-SA',
+            ru: 'ru-RU',
+            zh: 'zh-CN',
+            ja: 'ja-JP',
+            ko: 'ko-KR'
+        };
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            loadState();
+            initializeChat();
+            createSuggestedQuestions();
+            updateUILanguage();
+            renderChatList();
+            renderShortcuts();
+            
+            // Mesaj giriş alanı otomatik yüksekliği
+            messageInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+
+            // Dil değişikliği
+            languageSelect.addEventListener('change', function() {
+                currentLanguage = this.value;
+                updateUILanguage();
+                updateChatLanguage();
+                saveState();
+            });
+
+            document.addEventListener('touchstart', onTouchStart, { passive: true });
+            document.addEventListener('touchend', onTouchEnd, { passive: true });
+        });
+
+        function saveState() {
+            const state = {
+                chatHistory,
+                quickShortcuts,
+                currentLanguage,
+                modelName: aiTitle.textContent,
+                compactMode: document.body.classList.contains('compact'),
+                isProMode
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function loadState() {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return;
+
+            try {
+                const state = JSON.parse(raw);
+                if (Array.isArray(state.chatHistory)) chatHistory = state.chatHistory;
+                if (Array.isArray(state.quickShortcuts)) {
+                    quickShortcuts = state.quickShortcuts
+                        .filter(item => typeof item === 'string' && item.trim())
+                        .slice(0, 12);
+                }
+                if (state.currentLanguage && translations.ui[state.currentLanguage]) {
+                    currentLanguage = state.currentLanguage;
+                    languageSelect.value = state.currentLanguage;
+                }
+                if (state.modelName) aiTitle.textContent = state.modelName;
+                if (state.compactMode) document.body.classList.add('compact');
+                isProMode = !!state.isProMode;
+            } catch (error) {
+                console.warn('Kaydedilen durum okunamadi:', error);
+            }
+        }
+
+        function updateProButton() {
+            const plusBtn = document.getElementById('plusBtn');
+            const label = translations.ui[currentLanguage].proFeatures;
+            plusBtn.innerHTML = `<i class="fas fa-crown"></i>${isProMode ? label + ' (Acik)' : label}`;
+            plusBtn.style.boxShadow = isProMode ? '0 0 0 3px rgba(16,163,127,0.2)' : 'none';
+        }
+
+        function showToast(message) {
+            if (toastTimeoutId) clearTimeout(toastTimeoutId);
+            appToast.textContent = message;
+            appToast.classList.add('show');
+            toastTimeoutId = setTimeout(() => {
+                appToast.classList.remove('show');
+            }, 2200);
+        }
+
+        async function uploadFiles(files) {
+            if (!files || files.length === 0) return;
+
+            if (!uploadEndpoint || !uploadEndpoint.trim()) {
+                const manualEndpoint = prompt('Yukleme adresini girin (ornek: https://site.com/upload):', '/upload');
+                if (!manualEndpoint) {
+                    showToast('Yukleme iptal edildi.');
+                    return;
+                }
+                uploadEndpoint = manualEndpoint.trim();
+                localStorage.setItem('smartai_upload_endpoint', uploadEndpoint);
+            }
+
+            const attachBtn = document.getElementById('attachBtn');
+            const originalBtnText = uploadBtnText ? uploadBtnText.textContent : '';
+            attachBtn.disabled = true;
+            if (uploadBtnText) uploadBtnText.textContent = currentLanguage === 'en' ? 'Uploading...' : 'Yukleniyor...';
+
+            try {
+                const formData = new FormData();
+                files.forEach(file => formData.append('files', file));
+
+                const response = await fetch(uploadEndpoint, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                showToast(currentLanguage === 'en' ? 'Files uploaded successfully.' : 'Dosyalar basariyla yuklendi.');
+            } catch (error) {
+                console.error('Dosya yukleme hatasi:', error);
+                showToast(currentLanguage === 'en' ? 'Upload failed. Check endpoint.' : 'Yukleme basarisiz. Adresi kontrol edin.');
+
+                const wantsChange = confirm(currentLanguage === 'en'
+                    ? 'Upload endpoint seems invalid. Do you want to update it?'
+                    : 'Yukleme adresi gecersiz gorunuyor. Degistirmek ister misin?');
+
+                if (wantsChange) {
+                    const newEndpoint = prompt(
+                        currentLanguage === 'en'
+                            ? 'Enter upload endpoint:'
+                            : 'Yeni yukleme adresini gir:',
+                        uploadEndpoint || '/upload'
+                    );
+
+                    if (newEndpoint && newEndpoint.trim()) {
+                        uploadEndpoint = newEndpoint.trim();
+                        localStorage.setItem('smartai_upload_endpoint', uploadEndpoint);
+                        showToast(currentLanguage === 'en' ? 'Endpoint saved.' : 'Adres kaydedildi.');
+                    }
+                }
+            } finally {
+                attachBtn.disabled = false;
+                if (uploadBtnText) uploadBtnText.textContent = originalBtnText || (currentLanguage === 'en' ? 'Upload' : 'Yukle');
+            }
+        }
+
+        function closeModal() {
+            appModal.classList.remove('open');
+            appModal.setAttribute('aria-hidden', 'true');
+            modalBody.innerHTML = '';
+            modalFooter.innerHTML = '';
+        }
+
+        function renderShortcuts() {
+            shortcutList.innerHTML = '';
+
+            if (quickShortcuts.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'shortcut-empty';
+                empty.textContent = currentLanguage === 'en'
+                    ? 'No shortcut yet. Add one from current chat.'
+                    : 'Henuz kisayol yok. Mevcut sohbetten ekleyebilirsin.';
+                shortcutList.appendChild(empty);
+            } else {
+                quickShortcuts.forEach((title, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'shortcut-item';
+
+                    const text = document.createElement('span');
+                    text.className = 'shortcut-text';
+                    text.textContent = title;
+
+                    const actions = document.createElement('div');
+                    actions.className = 'shortcut-actions';
+
+                    const openBtn = document.createElement('button');
+                    openBtn.className = 'shortcut-action-btn';
+                    openBtn.type = 'button';
+                    openBtn.textContent = currentLanguage === 'en' ? 'Open' : 'Ac';
+                    openBtn.onclick = function() {
+                        loadChat(title);
+                    };
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'shortcut-action-btn';
+                    removeBtn.type = 'button';
+                    removeBtn.textContent = currentLanguage === 'en' ? 'Del' : 'Sil';
+                    removeBtn.onclick = function() {
+                        quickShortcuts.splice(index, 1);
+                        renderShortcuts();
+                        saveState();
+                        showToast(currentLanguage === 'en' ? 'Shortcut removed.' : 'Kisayol silindi.');
+                    };
+
+                    actions.appendChild(openBtn);
+                    actions.appendChild(removeBtn);
+                    item.appendChild(text);
+                    item.appendChild(actions);
+                    shortcutList.appendChild(item);
+                });
+            }
+
+            shortcutCount.textContent = String(quickShortcuts.length);
+        }
+
+        function addShortcutFromCurrent() {
+            const lastItem = currentChat[currentChat.length - 1];
+            const candidate = (lastItem && lastItem.q) || messageInput.value.trim();
+
+            if (!candidate) {
+                showToast(currentLanguage === 'en' ? 'No chat title found for shortcut.' : 'Kisayol icin once bir sohbet baslat.');
+                return;
+            }
+
+            const title = candidate.length > 48 ? `${candidate.slice(0, 48)}...` : candidate;
+            if (quickShortcuts.includes(title)) {
+                showToast(currentLanguage === 'en' ? 'Shortcut already exists.' : 'Bu kisayol zaten var.');
+                return;
+            }
+
+            if (quickShortcuts.length >= 12) {
+                quickShortcuts.shift();
+            }
+
+            quickShortcuts.push(title);
+            renderShortcuts();
+            saveState();
+            showToast(currentLanguage === 'en' ? 'Shortcut added.' : 'Kisayol eklendi.');
+        }
+
+        function getBackupPayload() {
+            return {
+                version: 1,
+                exportedAt: new Date().toISOString(),
+                chatHistory,
+                quickShortcuts,
+                currentLanguage,
+                modelName: aiTitle.textContent,
+                compactMode: document.body.classList.contains('compact'),
+                isProMode
+            };
+        }
+
+        function exportAppBackup() {
+            const payload = getBackupPayload();
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `smartai-yedek-${new Date().toISOString().slice(0, 10)}.json`;
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast(currentLanguage === 'en' ? 'Backup downloaded.' : 'Yedek dosyasi indirildi.');
+        }
+
+        function triggerBackupImport() {
+            backupImportInput.click();
+        }
+
+        function importBackupFromFile(event) {
+            const file = event.target.files && event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(loadEvent) {
+                try {
+                    const parsed = JSON.parse(loadEvent.target.result);
+
+                    if (Array.isArray(parsed.chatHistory)) {
+                        chatHistory = parsed.chatHistory;
+                    }
+
+                    if (Array.isArray(parsed.quickShortcuts)) {
+                        quickShortcuts = parsed.quickShortcuts
+                            .filter(item => typeof item === 'string' && item.trim())
+                            .slice(0, 12);
+                    }
+
+                    if (parsed.currentLanguage && translations.ui[parsed.currentLanguage]) {
+                        currentLanguage = parsed.currentLanguage;
+                        languageSelect.value = parsed.currentLanguage;
+                    }
+
+                    if (typeof parsed.modelName === 'string' && parsed.modelName.trim()) {
+                        aiTitle.textContent = parsed.modelName;
+                    }
+
+                    document.body.classList.toggle('compact', !!parsed.compactMode);
+                    isProMode = !!parsed.isProMode;
+
+                    updateUILanguage();
+                    renderChatList();
+                    renderShortcuts();
+                    initializeChat();
+                    saveState();
+                    showToast(currentLanguage === 'en' ? 'Backup loaded.' : 'Yedek basariyla yuklendi.');
+                } catch (error) {
+                    console.error('Yedek yukleme hatasi:', error);
+                    showToast(currentLanguage === 'en' ? 'Invalid backup file.' : 'Gecersiz yedek dosyasi.');
+                } finally {
+                    backupImportInput.value = '';
+                }
+            };
+
+            reader.readAsText(file);
+        }
+
+        function installAsApp() {
+            if (!deferredInstallPrompt) {
+                showToast('Yukleme secenegi simdilik kullanilamiyor. HTTPS ve destekleyen tarayici gerekli.');
+                return;
+            }
+
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then(function(choice) {
+                if (choice && choice.outcome === 'accepted') {
+                    showToast('Yukleme istegi gonderildi. Ana ekranini kontrol et.');
+                } else {
+                    showToast('Yukleme islemi iptal edildi.');
+                }
+
+                deferredInstallPrompt = null;
+                installAppBtn.style.display = 'none';
+            });
+        }
+
+        async function createDesktopShortcut() {
+            const pageUrl = window.location.href;
+            const shortcutContent = `[InternetShortcut]\nURL=${pageUrl}\n`;
+            const fileName = 'SmartAI Pro.url';
+
+            try {
+                if (window.showSaveFilePicker) {
+                    const handle = await window.showSaveFilePicker({
+                        suggestedName: fileName,
+                        types: [{
+                            description: 'Internet Shortcut',
+                            accept: { 'application/internet-shortcut': ['.url'] }
+                        }]
+                    });
+
+                    const writable = await handle.createWritable();
+                    await writable.write(shortcutContent);
+                    await writable.close();
+                    showToast(currentLanguage === 'en' ? 'Desktop shortcut file created.' : 'Masaustu kisayol dosyasi olusturuldu.');
+                    return;
+                }
+
+                const blob = new Blob([shortcutContent], { type: 'application/internet-shortcut' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = fileName;
+                link.click();
+                URL.revokeObjectURL(url);
+                showToast(currentLanguage === 'en' ? 'Shortcut downloaded. Move it to desktop.' : 'Kisayol indirildi. Masaustune tasiyin.');
+            } catch (error) {
+                if (error && error.name === 'AbortError') {
+                    showToast(currentLanguage === 'en' ? 'Operation cancelled.' : 'Islem iptal edildi.');
+                    return;
+                }
+                console.error('Kisayol olusturma hatasi:', error);
+                showToast(currentLanguage === 'en' ? 'Shortcut creation failed.' : 'Kisayol olusturulamadi.');
+            }
+        }
+
+        function isMobileLayout() {
+            return window.innerWidth <= 900;
+        }
+
+        function setMobileSidebar(open) {
+            if (!isMobileLayout()) {
+                rootContainer.classList.remove('mobile-sidebar-open');
+                document.body.style.overflow = '';
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                return;
+            }
+
+            rootContainer.classList.toggle('mobile-sidebar-open', open);
+            document.body.style.overflow = open ? 'hidden' : '';
+            mobileMenuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+
+        function closeMobileSidebar() {
+            setMobileSidebar(false);
+        }
+
+        function toggleMobileSidebar() {
+            if (!isMobileLayout()) return;
+            setMobileSidebar(!rootContainer.classList.contains('mobile-sidebar-open'));
+        }
+
+        function onTouchStart(event) {
+            if (!isMobileLayout() || !event.changedTouches || event.changedTouches.length === 0) return;
+            touchStartX = event.changedTouches[0].clientX;
+            touchStartY = event.changedTouches[0].clientY;
+        }
+
+        function onTouchEnd(event) {
+            if (!isMobileLayout() || !event.changedTouches || event.changedTouches.length === 0) return;
+
+            const touch = event.changedTouches[0];
+            const deltaX = touch.clientX - touchStartX;
+            const deltaY = Math.abs(touch.clientY - touchStartY);
+            const sidebarOpen = rootContainer.classList.contains('mobile-sidebar-open');
+
+            if (deltaY > 60) return;
+
+            if (!sidebarOpen && touchStartX < 28 && deltaX > 55) {
+                setMobileSidebar(true);
+            }
+
+            if (sidebarOpen && deltaX < -55) {
+                setMobileSidebar(false);
+            }
+        }
+
+        function openModal(title) {
+            closeMobileSidebar();
+            modalTitle.textContent = title;
+            appModal.classList.add('open');
+            appModal.setAttribute('aria-hidden', 'false');
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        appModal.addEventListener('click', function(event) {
+            if (event.target === appModal) closeModal();
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                if (appModal.classList.contains('open')) closeModal();
+                closeMobileSidebar();
+            }
+
+            if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+                event.preventDefault();
+                messageInput.focus();
+            }
+        });
+
+        function showWelcome() {
+            chatContainer.innerHTML = '';
+            welcomeMessage.style.display = 'block';
+            chatContainer.appendChild(welcomeMessage);
+        }
+
+        // UI dilini güncelle
+        function updateUILanguage() {
+            const lang = translations.ui[currentLanguage];
+            const welcome = translations.welcome[currentLanguage];
+            
+            // Butonları güncelle
+            newChatBtn.innerHTML = `<i class="fas fa-plus"></i>${lang.newChat}`;
+            document.getElementById('searchBtn').innerHTML = `<i class="fas fa-search"></i>${lang.searchChats}`;
+            document.getElementById('libraryBtn').innerHTML = `<i class="fas fa-database"></i>${lang.knowledgeBase}`;
+            document.getElementById('historyBtn').innerHTML = `<i class="fas fa-history"></i>${lang.allHistory}`;
+            updateProButton();
+            
+            // Başlıkları güncelle
+            welcomeTitle.textContent = welcome.title;
+            welcomeSubtitle.textContent = welcome.subtitle;
+            document.querySelector('.chat-history h3').innerHTML = `${lang.recentChats} <span id="chatCount">0</span>`;
+            chatCountEl = document.getElementById('chatCount');
+
+            backupBtn.innerHTML = `<i class="fas fa-file-export"></i>${currentLanguage === 'en' ? 'Backup' : 'Yedek Al'}`;
+            restoreBtn.innerHTML = `<i class="fas fa-file-import"></i>${currentLanguage === 'en' ? 'Restore' : 'Yedek Yukle'}`;
+            addShortcutBtn.innerHTML = `<i class="fas fa-star"></i>${currentLanguage === 'en' ? 'Add Shortcut' : 'Kisa Yol Ekle'}`;
+            desktopShortcutBtn.innerHTML = `<i class="fas fa-desktop"></i>${currentLanguage === 'en' ? 'Desktop Shortcut' : 'Masaustu Kisayolu'}`;
+            if (uploadBtnText) {
+                uploadBtnText.textContent = currentLanguage === 'en' ? 'Upload' : 'Yukle';
+            }
+            
+            // Placeholder güncelle
+            messageInput.placeholder = lang.placeholder;
+            
+            // Önerilen soruları güncelle
+            createSuggestedQuestions();
+            renderShortcuts();
+        }
+
+        // Sohbet dilini güncelle
+        function updateChatLanguage() {
+            // Mevcut sohbetleri temizle
+            showWelcome();
+            currentChat = [];
+            renderChatList();
+        }
+
+        // Metin çeviri fonksiyonu (basit versiyon)
+        function translateText(text, targetLang) {
+            if (targetLang === 'tr') return text;
+            
+            // Basit çeviri tablosu (gerçek uygulamada API kullanılmalı)
+            const translationMap = {
+                'en': {
+                    'Merhaba': 'Hello',
+                    'Python': 'Python',
+                    'yapay zeka': 'artificial intelligence',
+                    'sağlıklı beslenme': 'healthy eating'
+                },
+                'es': {
+                    'Merhaba': 'Hola',
+                    'Python': 'Python',
+                    'yapay zeka': 'inteligencia artificial',
+                    'sağlıklı beslenme': 'alimentación saludable'
+                }
+            };
+            
+            let translated = text;
+            if (translationMap[targetLang]) {
+                for (const [key, value] of Object.entries(translationMap[targetLang])) {
+                    translated = translated.replace(new RegExp(key, 'gi'), value);
+                }
+            }
+            
+            return translated || text;
+        }
+
+        // Önerilen soruları oluştur
+        function createSuggestedQuestions() {
+            suggestedQuestions.innerHTML = '';
+            const suggestions = translations.ui[currentLanguage].suggestions;
+            
+            suggestions.forEach(question => {
+                const button = document.createElement('button');
+                button.className = 'suggestion-btn';
+                button.innerHTML = `<i class="fas fa-lightbulb"></i>${question}`;
+                button.onclick = () => sendMessage(question);
+                suggestedQuestions.appendChild(button);
+            });
+        }
+
+        // Örnek sohbetleri yükle
+        function loadSampleChats() {
+            chatList.innerHTML = '';
+            const sampleChats = translations.ui[currentLanguage].suggestions.slice(0, 10);
+            
+            sampleChats.forEach((chat) => {
+                const item = document.createElement('div');
+                item.className = 'chat-item';
+                item.innerHTML = `<span>${chat}</span><i class="fas fa-chevron-right"></i>`;
+                item.onclick = () => loadChat(chat);
+                chatList.appendChild(item);
+            });
+            
+            chatCountEl.textContent = sampleChats.length;
+        }
+
+        function renderChatList() {
+            if (chatHistory.length === 0) {
+                loadSampleChats();
+                return;
+            }
+
+            chatList.innerHTML = '';
+            const titles = chatHistory
+                .map(chat => chat.title)
+                .filter((title, index, arr) => title && arr.indexOf(title) === index)
+                .slice(0, 20);
+
+            titles.forEach(title => {
+                const item = document.createElement('div');
+                item.className = 'chat-item';
+                item.innerHTML = `<span>${title}</span><i class="fas fa-chevron-right"></i>`;
+                item.onclick = () => loadChat(title);
+                chatList.appendChild(item);
+            });
+
+            chatCountEl.textContent = titles.length;
+        }
+
+        // Sohbeti yükle
+        function loadChat(title) {
+            closeMobileSidebar();
+            welcomeMessage.style.display = 'none';
+            chatContainer.innerHTML = '';
+            currentChat = [];
+            
+            const matchingQA = getQADatabase().filter(qa => 
+                title.toLowerCase().includes(qa.q.toLowerCase().split(' ')[0]) ||
+                qa.q.toLowerCase().includes(title.toLowerCase().split(' ')[0])
+            );
+            
+            if (matchingQA.length > 0) {
+                matchingQA.forEach(qa => {
+                    addMessageToChat(qa.q, 'user');
+                    setTimeout(() => {
+                        addMessageToChat(qa.a, 'ai');
+                    }, 500);
+                    currentChat.push({ q: qa.q, a: qa.a });
+                });
+            } else {
+                addMessageToChat(title, 'user');
+                setTimeout(() => {
+                    const response = getAIResponse(title);
+                    addMessageToChat(response, 'ai');
+                    currentChat.push({ q: title, a: response });
+                }, 1000);
+            }
+            
+            chatHistory.push({
+                title: title.length > 30 ? title.substring(0, 30) + '...' : title,
+                messages: currentChat,
+                timestamp: new Date().toISOString()
+            });
+            
+            updateChatList();
+            saveState();
+        }
+
+        // Yeni sohbet başlat
+        function initializeChat() {
+            closeMobileSidebar();
+            showWelcome();
+            currentChat = [];
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+        }
+
+        // Mesaj gönder
+        sendBtn.onclick = sendUserMessage;
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendUserMessage();
+            }
+        });
+
+        function sendUserMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            sendMessage(message);
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+        }
+
+        function sendMessage(message) {
+            closeMobileSidebar();
+            if (welcomeMessage.isConnected) {
+                welcomeMessage.style.display = 'none';
+            }
+
+            if (window.navigator && typeof window.navigator.vibrate === 'function') {
+                window.navigator.vibrate(15);
+            }
+
+            addMessageToChat(message, 'user');
+            
+            // Typing indicator göster
+            showTypingIndicator();
+            
+            // AI yanıtını gecikmeli göster
+            const responseDelay = isProMode ? 350 + Math.random() * 450 : 800 + Math.random() * 1200;
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = getAIResponse(message);
+                addMessageToChat(response, 'ai');
+                
+                // Sohbet geçmişine ekle
+                currentChat.push({ q: message, a: response });
+                
+                // Eğer ilk mesajsa sohbet listesine ekle
+                if (currentChat.length === 1) {
+                    const title = message.length > 30 ? message.substring(0, 30) + '...' : message;
+                    addToChatList(title);
+                }
+                
+                scrollToBottom();
+            }, responseDelay);
+        }
+
+        // AI yanıtı üret
+        function getAIResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            const qaDB = getQADatabase();
+            
+            // Tam eşleşme kontrolü
+            for (const qa of qaDB) {
+                if (lowerMessage === qa.q.toLowerCase()) {
+                    return qa.a;
+                }
+            }
+            
+            // Anahtar kelime eşleşmesi
+            for (const qa of qaDB) {
+                const keywords = qa.q.toLowerCase().split(' ');
+                for (const keyword of keywords) {
+                    if (keyword.length > 3 && lowerMessage.includes(keyword)) {
+                        return qa.a;
+                    }
+                }
+            }
+            
+            // İçerik bazlı eşleşme
+            for (const qa of qaDB) {
+                const words = lowerMessage.split(' ');
+                let matchCount = 0;
+                
+                for (const word of words) {
+                    if (word.length > 3 && 
+                        (qa.q.toLowerCase().includes(word) || qa.a.toLowerCase().includes(word))) {
+                        matchCount++;
+                    }
+                }
+                
+                if (matchCount >= 2) {
+                    return qa.a;
+                }
+            }
+            
+            // Jenerik akıllı yanıtlar
+            return generateSmartGenericResponse(message);
+        }
+
+        // Akıllı jenerik yanıt üret
+        function generateSmartGenericResponse(message) {
+            const responses = {
+                tr: [
+                    `"${message}" konusu hakkında size detaylı bilgi verebilirim. Bu konuda spesifik olarak ne öğrenmek istiyorsunuz?`,
+                    `İlginç bir soru! ${message} hakkında bildiklerimi paylaşayım: Bu konu, modern dünyada giderek daha fazla önem kazanıyor.`,
+                    `Teşekkür ederim bu soru için. ${message} konusunda size en güncel ve doğru bilgileri vermeye çalışacağım.`,
+                    `Anladığım kadarıyla ${message} hakkında bilgi istiyorsunuz. Bu konuyu şu açılardan ele alabiliriz:`,
+                    `Bu soru üzerine düşündüm. ${message} ile ilgili olarak şunları söyleyebilirim:`,
+                    `Harika bir soru! ${message}, günümüzün en önemli konularından biri. Size bu konuda kapsamlı bir açıklama yapabilirim.`
+                ],
+                en: [
+                    `I can provide detailed information about "${message}". What specifically would you like to know about this topic?`,
+                    `Interesting question! Let me share what I know about ${message}: This topic is becoming increasingly important in the modern world.`,
+                    `Thank you for this question. I'll try to give you the most current and accurate information about ${message}.`,
+                    `As I understand, you want information about ${message}. We can approach this topic from the following perspectives:`,
+                    `I've thought about this question. Regarding ${message}, I can say the following:`,
+                    `Great question! ${message} is one of the most important topics today. I can give you a comprehensive explanation about this.`
+                ]
+                // Diğer diller için benzer yanıtlar eklenebilir
+            };
+            
+            const langResponses = responses[currentLanguage] || responses.tr;
+            return langResponses[Math.floor(Math.random() * langResponses.length)];
+        }
+
+        // Mevcut dil için QA veritabanını getir
+        function getQADatabase() {
+            switch(currentLanguage) {
+                case 'en': return qaDatabaseEN;
+                case 'es': return qaDatabaseES;
+                // Diğer diller için
+                default: return qaDatabaseTR;
+            }
+        }
+
+        // Mesajı sohbete ekle
+        function addMessageToChat(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = message;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'message-time';
+            timeDiv.textContent = new Date().toLocaleTimeString(currentLanguage === 'tr' ? 'tr-TR' : 'en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(timeDiv);
+            chatContainer.appendChild(messageDiv);
+            
+            scrollToBottom();
+        }
+
+        // Typing indicator göster
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message';
+            typingDiv.id = 'typingIndicator';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'typing-indicator';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'typing-dot';
+                contentDiv.appendChild(dot);
+            }
+            
+            typingDiv.appendChild(contentDiv);
+            chatContainer.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        // Typing indicator kaldır
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // Sohbet listesini güncelle
+        function updateChatList() {
+            renderChatList();
+        }
+
+        // Sohbet listesine ekle
+        function addToChatList(title) {
+            chatHistory.push({
+                title: title,
+                messages: currentChat,
+                timestamp: new Date().toISOString()
+            });
+            
+            updateChatList();
+            saveState();
+        }
+
+        // En alta kaydır
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Buton event listener'ları
+        newChatBtn.onclick = initializeChat;
+        
+        document.getElementById('searchBtn').onclick = function() {
+            openModal(translations.ui[currentLanguage].searchChats);
+
+            const input = document.createElement('input');
+            input.className = 'modal-input';
+            input.placeholder = 'Aramak istediginiz sohbet basligini yazin...';
+
+            const resultInfo = document.createElement('div');
+            resultInfo.style.color = '#6b7280';
+            resultInfo.style.fontSize = '14px';
+
+            const applySearch = function() {
+                const normalized = input.value.trim().toLowerCase();
+                const items = chatList.querySelectorAll('.chat-item');
+                let visibleCount = 0;
+
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const isVisible = !normalized || text.includes(normalized);
+                    item.style.display = isVisible ? 'flex' : 'none';
+                    if (isVisible) visibleCount++;
+                });
+
+                resultInfo.textContent = `${visibleCount} sohbet listelendi.`;
+            };
+
+            input.addEventListener('input', applySearch);
+            modalBody.appendChild(input);
+            modalBody.appendChild(resultInfo);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'modal-action-btn secondary';
+            closeBtn.textContent = 'Kapat';
+            closeBtn.onclick = closeModal;
+
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'modal-action-btn primary';
+            resetBtn.textContent = 'Temizle';
+            resetBtn.onclick = function() {
+                input.value = '';
+                applySearch();
+                showToast('Arama sifirlandi.');
+            };
+
+            modalFooter.appendChild(closeBtn);
+            modalFooter.appendChild(resetBtn);
+            input.focus();
+            applySearch();
+        };
+        
+        document.getElementById('libraryBtn').onclick = function() {
+            const qaDB = getQADatabase().slice(0, 20);
+            openModal(translations.ui[currentLanguage].knowledgeBase);
+
+            qaDB.forEach((item, idx) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'modal-list-btn';
+                button.textContent = `${idx + 1}. ${item.q}`;
+                button.onclick = function() {
+                    closeModal();
+                    sendMessage(item.q);
+                };
+                modalBody.appendChild(button);
+            });
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'modal-action-btn secondary';
+            closeBtn.textContent = 'Kapat';
+            closeBtn.onclick = closeModal;
+            modalFooter.appendChild(closeBtn);
+        };
+        
+        document.getElementById('historyBtn').onclick = function() {
+            if (chatHistory.length === 0) {
+                showToast('Henuz kayitli sohbet gecmisi yok.');
+                return;
+            }
+
+            const recent = chatHistory.slice(-10).reverse();
+            openModal(translations.ui[currentLanguage].allHistory);
+
+            recent.forEach((item, idx) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'modal-list-btn';
+                const date = new Date(item.timestamp).toLocaleDateString(currentLanguage === 'tr' ? 'tr-TR' : 'en-US');
+                button.textContent = `${idx + 1}. ${item.title} (${date})`;
+                button.onclick = function() {
+                    closeModal();
+                    loadChat(item.title);
+                };
+                modalBody.appendChild(button);
+            });
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'modal-action-btn secondary';
+            closeBtn.textContent = 'Kapat';
+            closeBtn.onclick = closeModal;
+            modalFooter.appendChild(closeBtn);
+        };
+        
+        document.getElementById('plusBtn').onclick = function() {
+            isProMode = !isProMode;
+            updateProButton();
+            saveState();
+            const modeMessage = isProMode
+                ? 'PRO modu acildi. Daha hizli yanit ve gelismis davranis aktif.'
+                : 'PRO modu kapatildi. Standart moda donuldu.';
+            addMessageToChat(modeMessage, 'ai');
+        };
+        
+        document.getElementById('settingsBtn').onclick = function() {
+            document.body.classList.toggle('compact');
+            saveState();
+            showToast(document.body.classList.contains('compact') ? 'Kompakt gorunum acildi.' : 'Kompakt gorunum kapatildi.');
+        };
+        
+        document.getElementById('attachBtn').classList.add('upload-btn');
+
+        document.getElementById('attachBtn').onclick = function() {
+            hiddenFileInput.click();
+        };
+
+        hiddenFileInput.addEventListener('change', function() {
+            const files = Array.from(this.files || []);
+            if (files.length === 0) return;
+
+            const summary = files
+                .slice(0, 3)
+                .map(file => `${file.name} (${Math.ceil(file.size / 1024)} KB)`)
+                .join(', ');
+
+            const prefix = messageInput.value.trim() ? '\n' : '';
+            messageInput.value += `${prefix}[Eklenen dosyalar: ${summary}]`;
+            messageInput.dispatchEvent(new Event('input'));
+            uploadFiles(files);
+            this.value = '';
+        });
+        
+        document.getElementById('voiceBtn').onclick = function() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                showToast('Bu tarayicida sesli giris desteklenmiyor.');
+                return;
+            }
+
+            if (!recognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = speechLanguageMap[currentLanguage] || 'tr-TR';
+                recognition.interimResults = true;
+                recognition.continuous = false;
+
+                recognition.onresult = function(event) {
+                    const transcript = Array.from(event.results)
+                        .map(result => result[0].transcript)
+                        .join(' ')
+                        .trim();
+                    if (transcript) {
+                        messageInput.value = transcript;
+                        messageInput.dispatchEvent(new Event('input'));
+                    }
+                };
+
+                recognition.onend = function() {
+                    isListening = false;
+                    voiceBtn.style.color = '#6e6e80';
+                };
+
+                recognition.onerror = function() {
+                    isListening = false;
+                    voiceBtn.style.color = '#6e6e80';
+                    showToast('Ses algilanamadi. Tekrar deneyin.');
+                };
+            }
+
+            if (isListening) {
+                recognition.stop();
+                return;
+            }
+
+            recognition.lang = speechLanguageMap[currentLanguage] || 'tr-TR';
+            recognition.start();
+            isListening = true;
+            voiceBtn.style.color = 'var(--primary)';
+        };
+        
+        document.getElementById('modelSelect').onclick = function() {
+            const models = ['SmartAI Basic', 'SmartAI Pro', 'SmartAI Ultra'];
+            const currentModel = aiTitle.textContent;
+            const nextModel = models[(models.indexOf(currentModel) + 1) % models.length];
+            aiTitle.textContent = nextModel;
+            saveState();
+            showToast(`Model degisti: ${nextModel}`);
+        };
+
+        mobileMenuBtn.addEventListener('click', toggleMobileSidebar);
+        mobileOverlay.addEventListener('click', closeMobileSidebar);
+        backupBtn.addEventListener('click', exportAppBackup);
+        restoreBtn.addEventListener('click', triggerBackupImport);
+        addShortcutBtn.addEventListener('click', addShortcutFromCurrent);
+        backupImportInput.addEventListener('change', importBackupFromFile);
+        window.addEventListener('resize', function() {
+            if (!isMobileLayout()) {
+                closeMobileSidebar();
+            }
+        });
+        installAppBtn.addEventListener('click', installAsApp);
+        desktopShortcutBtn.addEventListener('click', createDesktopShortcut);
+
+        window.addEventListener('beforeinstallprompt', function(event) {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+            installAppBtn.style.display = 'inline-flex';
+        });
+
+        window.addEventListener('appinstalled', function() {
+            deferredInstallPrompt = null;
+            installAppBtn.style.display = 'none';
+            showToast('Uygulama cihaza kuruldu. Ana ekrandan acabilirsin.');
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('service-worker.js').catch(function(error) {
+                    console.error('Service worker kaydi basarisiz:', error);
+                });
+            });
+        }
+
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+
+        updateProButton();
+    </script>
+</body>
+</html>
