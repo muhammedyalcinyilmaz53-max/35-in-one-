@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0f766e">
+  <title>Çoklu Amaçlı Uygulama — Geliştirilmiş</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <meta name="description" content="Çoklu Amaçlı Uygulama — 35 araç. Geliştirilmiş görünüm: hızlı, erişilebilir, yapay zeka entegrasyonu (lazy-loaded).">
+  <style>
+    :root{--brand:#0f766e;--bg:#f8f5ef;--surface:#fff;--muted:#64748b}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Segoe UI, Roboto, Arial, sans-serif;background:linear-gradient(145deg,var(--bg),#e8f6f2);color:#0f1724}
+    .wrap{max-width:1200px;margin:28px auto;padding:18px}
+    header{display:flex;align-items:center;gap:12px}
+    h1{font-size:20px;margin:0;color:var(--brand)}
+    .controls{margin-left:auto;display:flex;gap:8px}
+    button.control{background:var(--brand);color:#fff;border:0;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+    button.ghost{background:transparent;color:var(--brand);border:1px solid rgba(15,118,110,0.12)}
+    .note{font-size:13px;color:var(--muted);margin-top:8px}
+
+    /* Frame area */
+    .frames{margin-top:18px;border-radius:12px;overflow:hidden;background:var(--surface);min-height:66vh;border:1px solid rgba(15,118,110,0.06);display:flex;flex-direction:column}
+    .frame-full{flex:1}
+    iframe{width:100%;height:100%;border:0;display:block}
+
+    /* Split view */
+    .split{display:flex;gap:0}
+    .split .frame{width:50%;height:calc(100vh - 220px)}
+
+    /* Small screens */
+    @media (max-width:900px){
+      .split{flex-direction:column}
+      .split .frame{width:100%;height:50vh}
+    }
+
+    /* Accessibility focus */
+    button:focus{outline:3px solid rgba(15,118,110,0.18)}
+
+    /* helper */
+    .hint{font-size:13px;color:#334155;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Çoklu Amaçlı Uygulama — Geliştirilmiş</h1>
+      <div class="controls" role="toolbar" aria-label="Görünüm kontrolleri">
+        <button id="btnApp" class="control" aria-pressed="true" title="Ana uygulamaya geç">Uygulama</button>
+        <button id="btnAi" class="control ghost" aria-pressed="false" title="Yapay Zeka arayüzünü aç">Yapay Zeka</button>
+        <button id="btnSplit" class="control ghost" aria-pressed="false" title="Yan yana göster">Yan Yana</button>
+      </div>
+    </header>
+    <div class="note">Klavye: A = Yapay Zeka, S = Yan Yana, Esc = Ana Uygulama. AI iframe sadece ihtiyaçta yüklenir (lazy load).</div>
+
+    <div class="frames" id="frames">
+      <!-- Tek iframe modu başlangıçta ana uygulama -->
+      <div class="frame frame-full" id="frameApp" role="region" aria-label="Ana uygulama">
+        <iframe id="iframeApp" src="35 in 1.html" title="35 in 1 Uygulama" loading="eager"></iframe>
+      </div>
+
+      <!-- AI iframe (lazy) - başlangıçta yüklenmez; data-src kullanıyoruz -->
+      <div class="frame" id="frameAi" role="region" aria-label="Yapay zeka arayüzü" style="display:none">
+        <iframe id="iframeAi" data-src="yapyzeka-simple.html" title="Yapay Zeka" loading="lazy"></iframe>
+      </div>
+    </div>
+
+    <div class="hint">Not: Yapay Zeka penceresindeki "Uygulamaya Dön" butonuna bastığınızda ana uygulamaya geri döneceksiniz.</div>
+  </div>
+
+  <script>
+    // Basit, güvenli kontrol ve lazy load
+    const btnApp = document.getElementById('btnApp');
+    const btnAi = document.getElementById('btnAi');
+    const btnSplit = document.getElementById('btnSplit');
+    const frameApp = document.getElementById('frameApp');
+    const frameAi = document.getElementById('frameAi');
+    const iframeAi = document.getElementById('iframeAi');
+    const frames = document.getElementById('frames');
+
+    // Local state persistence
+    const MODE_KEY = 'app_view_mode'; // 'app' | 'ai' | 'split'
+    function setMode(mode){
+      localStorage.setItem(MODE_KEY, mode);
+      updateView(mode);
+    }
+
+    function ensureAiLoaded(){
+      if(iframeAi && !iframeAi.src){
+        const src = iframeAi.getAttribute('data-src');
+        if(src) iframeAi.src = src;
+      }
+    }
+
+    function updateView(mode){
+      // reset aria-pressed
+      btnApp.setAttribute('aria-pressed', mode==='app');
+      btnAi.setAttribute('aria-pressed', mode==='ai');
+      btnSplit.setAttribute('aria-pressed', mode==='split');
+
+      if(mode === 'app'){
+        // show only app
+        frameApp.style.display = 'block';
+        frameAi.style.display = 'none';
+        frames.classList.remove('split');
+      } else if(mode === 'ai'){
+        ensureAiLoaded();
+        frameApp.style.display = 'none';
+        frameAi.style.display = 'block';
+        frames.classList.remove('split');
+        // focus AI iframe for keyboard users
+        iframeAi.focus && iframeAi.focus();
+      } else if(mode === 'split'){
+        ensureAiLoaded();
+        // show both side-by-side
+        // wrap frames in split layout
+        frames.classList.add('split');
+        frameApp.style.display = 'block';
+        frameAi.style.display = 'block';
+      }
+    }
+
+    // Initialize from saved mode
+    const saved = localStorage.getItem(MODE_KEY) || 'app';
+    // ensure iframeAi remains unloaded until needed
+    if(saved !== 'ai' && saved !== 'split'){
+      iframeAi.removeAttribute('src');
+    }
+
+    updateView(saved);
+
+    // Event handlers
+    btnApp.addEventListener('click', ()=> setMode('app'));
+    btnAi.addEventListener('click', ()=> setMode('ai'));
+    btnSplit.addEventListener('click', ()=> setMode('split'));
+
+    // keyboard shortcuts
+    window.addEventListener('keydown', (ev)=>{
+      if(ev.key === 'A' || ev.key === 'a'){
+        setMode('ai');
+      } else if(ev.key === 'S' || ev.key === 's'){
+        setMode('split');
+      } else if(ev.key === 'Escape'){
+        setMode('app');
+      }
+    });
+
+    // postMessage handler from AI iframe (secure-ish: check origin if needed)
+    window.addEventListener('message', (e)=>{
+      try{
+        if(e.data && e.data.type === 'showApp'){
+          setMode('app');
+        }
+      }catch(err){/* ignore */}
+    });
+
+    // Accessibility: prefer-reduced-motion
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.documentElement.style.scrollBehavior = 'auto';
+    }
+
+    // Performance: lazy preload AI on hover of AI button
+    let preloadTimer = null;
+    btnAi.addEventListener('pointerenter', ()=>{
+      preloadTimer = setTimeout(()=> ensureAiLoaded(), 350);
+    });
+    btnAi.addEventListener('pointerleave', ()=>{ clearTimeout(preloadTimer); });
+
+    // Fallback: if AI iframe fails to load within 6s when requested, show a friendly message
+    iframeAi.addEventListener('error', ()=>{
+      console.warn('AI iframe load error');
+    });
+  </script>
+</body>
+</html>
